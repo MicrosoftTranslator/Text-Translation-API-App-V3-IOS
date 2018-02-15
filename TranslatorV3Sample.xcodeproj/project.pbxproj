@@ -54,9 +54,9 @@
 		DE71555D203613AA0028203F /* TranslatorV3Sample */ = {
 			isa = PBXGroup;
 			children = (
+				DE715562203613AA0028203F /* Main.storyboard */,
 				DE71555E203613AA0028203F /* AppDelegate.swift */,
 				DE715560203613AA0028203F /* ViewController.swift */,
-				DE715562203613AA0028203F /* Main.storyboard */,
 				DE715565203613AA0028203F /* Assets.xcassets */,
 				DE715567203613AA0028203F /* LaunchScreen.storyboard */,
 				DE71556A203613AA0028203F /* Info.plist */,
