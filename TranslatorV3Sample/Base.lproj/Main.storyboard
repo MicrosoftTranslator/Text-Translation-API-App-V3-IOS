@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Main Menu-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TranslatorV3Sample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Main Menu" id="BYZ-38-t0r" customClass="ViewController" customModule="TranslatorV3Sample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,10 +81,10 @@
             </objects>
             <point key="canvasLocation" x="464.80000000000001" y="82.3088455772114"/>
         </scene>
-        <!--View Controller-->
+        <!--Transliteration-->
         <scene sceneID="IJP-2o-Tx3">
             <objects>
-                <viewController id="B0W-Gt-Jpw" sceneMemberID="viewController">
+                <viewController title="Transliteration" id="B0W-Gt-Jpw" customClass="Transliteration" customModule="TranslatorV3Sample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e6b-4s-MGi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -129,36 +129,24 @@
                                     <color key="titleColor" red="0.0048598507420000003" green="0.096086271109999996" blue="0.57499289509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transliteration" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erU-oq-wlZ">
-                                <rect key="frame" x="125" y="81" width="125" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="Ch8-fl-C9R"/>
-                                    <constraint firstAttribute="width" constant="125" id="tMY-wH-RKs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7fE-I8-GDK" firstAttribute="trailing" secondItem="l6P-qZ-YiP" secondAttribute="trailing" constant="16" id="3ez-1F-qgO"/>
-                            <constraint firstItem="l6P-qZ-YiP" firstAttribute="top" secondItem="erU-oq-wlZ" secondAttribute="bottom" constant="25" id="4KC-rI-aoY"/>
                             <constraint firstItem="AQn-EY-Ki8" firstAttribute="leading" secondItem="7fE-I8-GDK" secondAttribute="leading" constant="16" id="5Zr-rw-s76"/>
                             <constraint firstItem="Iyo-G5-lpF" firstAttribute="top" secondItem="pTm-fP-VMM" secondAttribute="bottom" constant="25" id="6gN-Hm-8Bi"/>
                             <constraint firstItem="AQn-EY-Ki8" firstAttribute="top" secondItem="Qh6-0f-e6x" secondAttribute="bottom" constant="41" id="Fnf-Gr-yVg"/>
                             <constraint firstItem="Iyo-G5-lpF" firstAttribute="leading" secondItem="7fE-I8-GDK" secondAttribute="leading" constant="16" id="IOI-aE-iWC"/>
                             <constraint firstItem="Qh6-0f-e6x" firstAttribute="leading" secondItem="7fE-I8-GDK" secondAttribute="leading" constant="16" id="JWp-EH-lgx"/>
                             <constraint firstItem="7fE-I8-GDK" firstAttribute="trailing" secondItem="AQn-EY-Ki8" secondAttribute="trailing" constant="16" id="Lk2-jP-fO4"/>
-                            <constraint firstItem="erU-oq-wlZ" firstAttribute="centerX" secondItem="e6b-4s-MGi" secondAttribute="centerX" id="PG8-qS-rbq"/>
                             <constraint firstItem="l6P-qZ-YiP" firstAttribute="leading" secondItem="7fE-I8-GDK" secondAttribute="leading" constant="16" id="TyO-zh-Dzz"/>
                             <constraint firstItem="pTm-fP-VMM" firstAttribute="leading" secondItem="7fE-I8-GDK" secondAttribute="leading" constant="16" id="bIw-61-tXG"/>
                             <constraint firstItem="7fE-I8-GDK" firstAttribute="trailing" secondItem="Qh6-0f-e6x" secondAttribute="trailing" constant="16" id="cHd-LG-og9"/>
                             <constraint firstItem="7fE-I8-GDK" firstAttribute="trailing" secondItem="Iyo-G5-lpF" secondAttribute="trailing" constant="16" id="e1k-aM-JRk"/>
                             <constraint firstItem="pTm-fP-VMM" firstAttribute="top" secondItem="l6P-qZ-YiP" secondAttribute="bottom" constant="8" id="fy7-q6-XMp"/>
+                            <constraint firstItem="l6P-qZ-YiP" firstAttribute="top" secondItem="7fE-I8-GDK" secondAttribute="top" constant="63" id="gJg-Yb-jZ1"/>
                             <constraint firstItem="7fE-I8-GDK" firstAttribute="trailing" secondItem="pTm-fP-VMM" secondAttribute="trailing" constant="16" id="heX-DW-AwH"/>
                             <constraint firstItem="Qh6-0f-e6x" firstAttribute="top" secondItem="Iyo-G5-lpF" secondAttribute="bottom" constant="33" id="vAq-6U-muL"/>
-                            <constraint firstItem="erU-oq-wlZ" firstAttribute="top" secondItem="7fE-I8-GDK" secondAttribute="top" constant="17" id="yBg-cx-G7N"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7fE-I8-GDK"/>
                     </view>
@@ -167,22 +155,13 @@
             </objects>
             <point key="canvasLocation" x="1740" y="102.99850074962519"/>
         </scene>
-        <!--View Controller-->
+        <!--Dictionary-->
         <scene sceneID="5yu-HU-eLz">
             <objects>
-                <viewController id="hHF-Zp-ij0" sceneMemberID="viewController">
+                <viewController title="Dictionary" id="hHF-Zp-ij0" customClass="Dictionary" customModule="TranslatorV3Sample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fex-Nj-h23">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dictionary" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Em1-gz-OjA">
-                                <rect key="frame" x="166" y="103" width="105" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="5QH-lR-Ue9"/>
                     </view>
@@ -191,24 +170,14 @@
             </objects>
             <point key="canvasLocation" x="1740" y="793.8530734632684"/>
         </scene>
-        <!--View Controller-->
+        <!--Translation-->
         <scene sceneID="DaF-bt-aCL">
             <objects>
-                <viewController id="U64-DF-Qcj" sceneMemberID="viewController">
+                <viewController title="Translation" id="U64-DF-Qcj" customClass="Translation" customModule="TranslatorV3Sample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gi4-Hs-5ww">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Translate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bV3-P9-TVa">
-                                <rect key="frame" x="139" y="75" width="96" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="UP0-F5-u2c"/>
-                                    <constraint firstAttribute="width" constant="96" id="yR7-Xo-l6h"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Text to translate" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-KP-FHj">
                                 <rect key="frame" x="16" y="113" width="343" height="87"/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -254,8 +223,7 @@
                         <constraints>
                             <constraint firstItem="ivc-KP-FHj" firstAttribute="leading" secondItem="xLp-sa-xCv" secondAttribute="leading" constant="16" id="6dy-1S-kmk"/>
                             <constraint firstItem="xLp-sa-xCv" firstAttribute="trailing" secondItem="6cP-f8-mIt" secondAttribute="trailing" constant="16" id="Aud-1y-rb6"/>
-                            <constraint firstItem="ivc-KP-FHj" firstAttribute="top" secondItem="bV3-P9-TVa" secondAttribute="bottom" constant="17" id="HFC-2q-3ry"/>
-                            <constraint firstItem="bV3-P9-TVa" firstAttribute="top" secondItem="xLp-sa-xCv" secondAttribute="top" constant="11" id="KcU-ac-DYu"/>
+                            <constraint firstItem="ivc-KP-FHj" firstAttribute="top" secondItem="xLp-sa-xCv" secondAttribute="top" constant="49" id="J7L-Jg-weC"/>
                             <constraint firstItem="6cP-f8-mIt" firstAttribute="top" secondItem="mmU-uE-LLf" secondAttribute="bottom" constant="33" id="MBe-Dr-3hR"/>
                             <constraint firstItem="ogg-Eu-LXi" firstAttribute="top" secondItem="6cP-f8-mIt" secondAttribute="bottom" constant="41" id="OMy-Qx-T4G"/>
                             <constraint firstItem="mmU-uE-LLf" firstAttribute="top" secondItem="FM9-MF-EUR" secondAttribute="bottom" constant="25" id="Oek-ew-hDZ"/>
@@ -267,7 +235,6 @@
                             <constraint firstItem="mmU-uE-LLf" firstAttribute="leading" secondItem="xLp-sa-xCv" secondAttribute="leading" constant="16" id="rrG-15-gDW"/>
                             <constraint firstItem="6cP-f8-mIt" firstAttribute="leading" secondItem="xLp-sa-xCv" secondAttribute="leading" constant="16" id="uNG-V2-cDu"/>
                             <constraint firstItem="xLp-sa-xCv" firstAttribute="trailing" secondItem="mmU-uE-LLf" secondAttribute="trailing" constant="16" id="uSU-7u-m1C"/>
-                            <constraint firstItem="bV3-P9-TVa" firstAttribute="centerX" secondItem="gi4-Hs-5ww" secondAttribute="centerX" id="ygV-NE-Sdv"/>
                             <constraint firstItem="xLp-sa-xCv" firstAttribute="trailing" secondItem="ogg-Eu-LXi" secondAttribute="trailing" constant="16" id="zZS-iI-4ac"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xLp-sa-xCv"/>
