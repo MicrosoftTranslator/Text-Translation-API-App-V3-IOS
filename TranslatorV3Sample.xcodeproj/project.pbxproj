@@ -14,7 +14,6 @@
 		DE715569203613AA0028203F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE715567203613AA0028203F /* LaunchScreen.storyboard */; };
 		DE71557120363A5D0028203F /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE71557020363A5D0028203F /* Translation.swift */; };
 		DE71557320363ACE0028203F /* Transliteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE71557220363ACE0028203F /* Transliteration.swift */; };
-		DE71557720363B780028203F /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE71557620363B780028203F /* Dictionary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		DE71556A203613AA0028203F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE71557020363A5D0028203F /* Translation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		DE71557220363ACE0028203F /* Transliteration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transliteration.swift; sourceTree = "<group>"; };
-		DE71557620363B780028203F /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +63,6 @@
 				DE715560203613AA0028203F /* MainMenu.swift */,
 				DE71557020363A5D0028203F /* Translation.swift */,
 				DE71557220363ACE0028203F /* Transliteration.swift */,
-				DE71557620363B780028203F /* Dictionary.swift */,
 				DE715565203613AA0028203F /* Assets.xcassets */,
 				DE715567203613AA0028203F /* LaunchScreen.storyboard */,
 				DE71556A203613AA0028203F /* Info.plist */,
@@ -146,7 +143,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE715561203613AA0028203F /* MainMenu.swift in Sources */,
-				DE71557720363B780028203F /* Dictionary.swift in Sources */,
 				DE71555F203613AA0028203F /* AppDelegate.swift in Sources */,
 				DE71557120363A5D0028203F /* Translation.swift in Sources */,
 				DE71557320363ACE0028203F /* Transliteration.swift in Sources */,
@@ -287,6 +283,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JF5AMEJL94;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
@@ -301,6 +298,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JF5AMEJL94;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
