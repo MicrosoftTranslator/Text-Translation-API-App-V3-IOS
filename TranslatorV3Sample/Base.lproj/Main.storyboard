@@ -222,6 +222,9 @@
                                 <state key="normal" title="Translate">
                                     <color key="titleColor" red="0.0048598507420000003" green="0.096086271109999996" blue="0.57499289509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="getTranslationBtn:" destination="U64-DF-Qcj" eventType="touchUpInside" id="jF2-T5-qss"/>
+                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Translation" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6cP-f8-mIt">
                                 <rect key="frame" x="16" y="424" width="343" height="87"/>
@@ -268,7 +271,9 @@
                         <viewLayoutGuide key="safeArea" id="xLp-sa-xCv"/>
                     </view>
                     <connections>
+                        <outlet property="fromLangPicker" destination="FM9-MF-EUR" id="xCT-4C-mIV"/>
                         <outlet property="textToTranslate" destination="ivc-KP-FHj" id="zgP-fn-wO7"/>
+                        <outlet property="toLangPicker" destination="mmU-uE-LLf" id="07H-LW-i5Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fs4-4y-e9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
