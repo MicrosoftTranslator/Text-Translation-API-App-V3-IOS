@@ -274,6 +274,7 @@
                         <outlet property="fromLangPicker" destination="FM9-MF-EUR" id="xCT-4C-mIV"/>
                         <outlet property="textToTranslate" destination="ivc-KP-FHj" id="zgP-fn-wO7"/>
                         <outlet property="toLangPicker" destination="mmU-uE-LLf" id="07H-LW-i5Y"/>
+                        <outlet property="translatedText" destination="6cP-f8-mIt" id="Ftn-sp-pMR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fs4-4y-e9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
