@@ -11,7 +11,8 @@ import UIKit
 
 class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    
+    var fromLangCode = Int()
+    var toLangCode = Int()
     
     //*****used after parsing need to put into an array of structs
     struct AllLangDetails: Codable {
@@ -20,7 +21,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         var nativeName = String()
         var dir = String()
     }
-    var arrayLangInfo = [AllLangDetails]()
+    var arrayLangInfo = [AllLangDetails]() //array of structs for language info
     
     //*****Formatting JSON for body of request
     struct TranslatedStrings: Codable {
@@ -57,6 +58,14 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     @IBAction func getTranslationBtn(_ sender: Any) {
         
+        fromLangCode = self.fromLangPicker.selectedRow(inComponent: 0)
+        toLangCode = self.toLangPicker.selectedRow(inComponent: 0)
+        
+        print("this is the selected language code ->", arrayLangInfo[fromLangCode].code)
+        
+        let selectedFromLangCode = arrayLangInfo[fromLangCode].code
+        let selectedToLangCode = arrayLangInfo[toLangCode].code
+        
         struct encodeText: Codable {
             var text = String()
         }
@@ -65,7 +74,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
         let host = "dev.microsofttranslator.com"
-        let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=de"
+        let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
         
         let text2Translate = textToTranslate.text
         var encodeTextSingle = encodeText()
@@ -166,6 +175,11 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.blue])
         
         return attributedString
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let languageName = row
+        print("selected row ", languageName)
     }
     
     //*****CODE FROM PLAYGROUND FOR GETTING LANGUAGES NEED TO MOVE SOME VARS TO CLASS VARS
