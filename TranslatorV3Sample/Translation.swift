@@ -232,7 +232,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         
         //arrayLangInfo.count
         //print(arrayLangInfo[60])
-        arrayLangInfo.sort(by: {$0.code < $1.code})
+        arrayLangInfo.sort(by: {$0.name < $1.name})
         //print(arrayLangInfo)
     }
     
