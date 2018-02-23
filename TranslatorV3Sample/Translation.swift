@@ -11,6 +11,9 @@ import UIKit
 
 class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    var fromLangCode = Int()
+    var toLangCode = Int()
+    
     //*****used after parsing need to put into an array of structs
     struct AllLangDetails: Codable {
         var code = String()
@@ -43,7 +46,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         toLangPicker.delegate = self
         
         getLanguages()
-        usleep(900000)
+        usleep(500000)
     }
     
     override func didReceiveMemoryWarning() {
@@ -161,6 +164,10 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         var rowContent = String()
         
+        //*****
+        //TO DO: THE NATIVE NAME PICKER IS NOT SORTED CORRECTLY NEED TO CREATE TWO ARRAYS AND SORT ONE BY NAME AND THE OTHER BY NATIVE NAME, FROM IS NATIVE NAME.
+        //*****
+        
         if pickerView == fromLangPicker {
             rowContent = arrayLangInfo[row].nativeName
             
@@ -220,11 +227,9 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             }
         }
         
-        //Sort array of structs in place
-        arrayLangInfo.sort(by: {$0.code < $1.code})
-        
+        //arrayLangInfo.count
+        //print(arrayLangInfo[60])
+        arrayLangInfo.sort(by: {$0.name < $1.name})
+        //print(arrayLangInfo)
     }
-    
-    
-    
 }
