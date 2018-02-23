@@ -11,8 +11,6 @@ import UIKit
 
 class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    
-    
     //*****used after parsing need to put into an array of structs
     struct AllLangDetails: Codable {
         var code = String()
@@ -37,7 +35,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.hideKeyboardWhenTappedAround()
         
         fromLangPicker.dataSource = self
         toLangPicker.dataSource = self
@@ -94,8 +92,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             print("*****this is the response from the request")
             print("this is the response ", response!)
             print("this is the response data ", responseData!)
-            
             print(String(data: responseData!, encoding: .utf8)!)
+            
             if responseError != nil {
                 print("this is the error ", responseError!)
             }
@@ -103,9 +101,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             self.parseJson(jsonData: responseData!)
         }
         task.resume()
-//        DispatchQueue.main.async {
-//            self.translatedText.text = newTranslatedText
-//        }
+
         
     }
     
@@ -132,6 +128,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         print("**********")
         print("This is the language code -> ", langTranslations![0].translations[numberOfTranslations].to)
         
+        //Put response on main thread to update UI
         DispatchQueue.main.async {
             self.translatedText.text = langTranslations![0].translations[numberOfTranslations].text
         }
@@ -192,12 +189,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         let languages = try? jsonDecoder1.decode(Translation.self, from: jsonLangData)
         var eachLangInfo = AllLangDetails(code: " ", name: " ", nativeName: " ", dir: " ") //Use this instance to populate and then append to the array instance
         
-        //dump(languages)
-        //print(languages!.translation.first?.key as Any)
-        //print(languages!.translation.first?.value.name as Any)
-        //print(languages!.translation.first?.value.nativeName as Any)
-        //print(languages!.translation.first?.value.dir as Any)
-        
         for languageValues in languages!.translation.values {
             eachLangInfo.name = languageValues.name
             eachLangInfo.nativeName = languageValues.nativeName
@@ -216,10 +207,9 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             }
         }
         
-        //arrayLangInfo.count
-        //print(arrayLangInfo[60])
+        //Sort array of structs in place
         arrayLangInfo.sort(by: {$0.code < $1.code})
-        //print(arrayLangInfo)
+        
     }
     
     
