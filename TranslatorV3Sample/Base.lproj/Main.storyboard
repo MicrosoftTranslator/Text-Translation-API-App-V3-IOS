@@ -192,7 +192,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" text="Translate" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-KP-FHj">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" text="Enter Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-KP-FHj">
                                 <rect key="frame" x="16" y="123" width="343" height="80"/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -220,7 +220,7 @@
                                     <action selector="getTranslationBtn:" destination="U64-DF-Qcj" eventType="touchUpInside" id="jF2-T5-qss"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Translation" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6cP-f8-mIt">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6cP-f8-mIt">
                                 <rect key="frame" x="16" y="211" width="343" height="80"/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -235,7 +235,7 @@
                                     <constraint firstAttribute="height" constant="21" id="31A-ms-2xm"/>
                                     <constraint firstAttribute="width" constant="54" id="TS0-Wv-od6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -245,7 +245,7 @@
                                     <constraint firstAttribute="height" constant="21" id="4Xz-yc-Njv"/>
                                     <constraint firstAttribute="width" constant="27" id="9ZA-fo-67f"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
