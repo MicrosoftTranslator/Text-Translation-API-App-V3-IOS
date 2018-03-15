@@ -42,9 +42,13 @@ func parseTransliterate() -> Transliterate {
     let jsonData = try! Data(contentsOf: url)
     let jsonDecoder = JSONDecoder()
     
-    let languages = try? jsonDecoder.decode(Transliterate.self, from: jsonData)
+    guard let languages = try? jsonDecoder.decode(Transliterate.self, from: jsonData) else {
+        print("no languages")
+        let noLanguages = Transliterate()
+        return noLanguages
+    }
     
-    return languages!
+        return languages
 }
 
 
