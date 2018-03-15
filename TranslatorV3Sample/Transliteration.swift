@@ -36,10 +36,11 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        var languages = parseTransliterate()
+        dump(languages)
     }
     
-    var languages = parseTransliterate()
+    
     //*****move data from languages into the three structs
     
     
