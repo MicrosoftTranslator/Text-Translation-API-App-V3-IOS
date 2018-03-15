@@ -10,6 +10,39 @@ import Foundation
 import UIKit
 
 class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    //*****this is for after parsing to hold the data
+    struct TransliterationAll: Codable {
+        var langCode = String()
+        var langName = String()
+        var langNativeName = String()
+        var langScriptData = [LangDetails]() //re-using struct from parsing
+    }
+    
+    struct LangDetails: Codable {
+        var code = String()
+        var name = String()
+        var nativeName = String()
+        var dir = String()
+        var toScripts = [ToScripts]()
+        
+        struct ToScripts: Codable {
+            var code = String()
+            var name = String()
+            var nativeName = String()
+            var dir = String()
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    var languages = parseTransliterate()
+    //*****move data from languages into the three structs
+    
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -19,11 +52,20 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+
     
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
