@@ -4,9 +4,16 @@
 //
 //  Created by MSTranslatorMac on 3/15/18.
 //  Copyright © 2018 MSTranslatorMac. All rights reserved.
-//
-import Foundation
+
 import UIKit
+import Foundation
+
+
+let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
+let url = URL(string: sampleDataAddress)!
+let jsonData = try! Data(contentsOf: url)
+let jsonDecoder = JSONDecoder()
+
 
 //*****used in the parsing of request Json
 struct Transliterate: Codable {
@@ -37,10 +44,7 @@ struct ScriptLangDetails: Codable {
 
 func parseTransliterate() -> Transliterate {
     
-    let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
-    let url = URL(string: sampleDataAddress)!
-    let jsonData = try! Data(contentsOf: url)
-    let jsonDecoder = JSONDecoder()
+
     
     guard let languages = try? jsonDecoder.decode(Transliterate.self, from: jsonData) else {
         print("no languages")
