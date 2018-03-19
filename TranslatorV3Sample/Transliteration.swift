@@ -106,7 +106,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
                 scriptLangDetailsSingle.name = language.scripts[index].name
                 scriptLangDetailsSingle.nativeName = language.scripts[index].nativeName
                 scriptLangDetailsSingle.dir = language.scripts[index].dir
-                
+                //*****ADD TO SCRIPTS LOOP TO GET THE TOSCRIPTS ARRAY DATA
                 scriptLangDetailsSingle.toScripts.append(toScriptDetails)
             }
             
@@ -119,7 +119,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             transliterateLangData.append(transliterateLangDataEach)
             
         }
-        print(transliterateLangData)
+        print(transliterateLangData[0].langNativeName)
         
     }
     
