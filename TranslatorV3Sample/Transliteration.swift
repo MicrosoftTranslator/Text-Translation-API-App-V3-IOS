@@ -74,20 +74,57 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             var nativeName = String()
             var dir = String()
             var toScripts = [ToScripts]()
-            
-            struct ToScripts: Codable {
-                var code = String()
-                var name = String()
-                var nativeName = String()
-                var dir = String()
-            }
+        }
+        struct ToScripts: Codable {
+            var code = String()
+            var name = String()
+            var nativeName = String()
+            var dir = String()
         }
         //*****end parsing structs
         
         let languages = try? jsonDecoder.decode(Transliteration.self, from: jsonData)
         dump(languages)
-    }
+        
+        //Setup struct vars
+        var transliterateLangData = [TransliterationAll]()
+        var transliterateLangDataEach = TransliterationAll()
+        var scriptLangDetailsSingle = ScriptLangDetails()
+        var toScriptDetails = ToScripts()
+        
+        for language in (languages?.transliteration.values)! {
+            
+            transliterateLangDataEach.langName = language.name
+            transliterateLangDataEach.langNativeName = language.nativeName
+            print(language.scripts.count)
+            
+            //*****THIS LOOP WORKS*****
+            var countInScriptsArray = language.scripts.count
+            for index in 0...countInScriptsArray - 1 {
+                //print("*****", language.scripts[index])
+                scriptLangDetailsSingle.code = language.scripts[index].code
+                scriptLangDetailsSingle.name = language.scripts[index].name
+                scriptLangDetailsSingle.nativeName = language.scripts[index].nativeName
+                scriptLangDetailsSingle.dir = language.scripts[index].dir
+                
+                scriptLangDetailsSingle.toScripts.append(toScriptDetails)
+            }
+            
 
+            
+            
+            
+            //append each to array
+            transliterateLangDataEach.langScriptData.append(scriptLangDetailsSingle)
+            transliterateLangData.append(transliterateLangDataEach)
+            
+        }
+        print(transliterateLangData)
+        
+    }
+    
+    
+    
     
     //*****move data from languages into the three structs
     
