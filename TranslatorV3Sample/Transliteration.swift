@@ -11,26 +11,27 @@ import UIKit
 
 class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    
-    //*****this is for after parsing to hold the data
-    struct TransliterationAll: Codable {
-        var langCode = String()
-        var langName = String()
-        var langNativeName = String()
-        var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
-    }
-    
-    //*****used in the parsing of request Json
+    //*****Used in the parsing of request JSON as a dictionary
     struct Transliteration: Codable {
         var transliteration = [String: LanguageNames]()
     }
     
+    //This is for parsing of request JSON as a dictionary
     struct LanguageNames: Codable {
         var name = String()
         var nativeName = String()
         var scripts = [ScriptLangDetails]()
     }
     
+    //*****Used to hold the final data from parsing in an array of structs data pulled from dictionary parsed from the languages JSON.
+    struct TransliterationAll: Codable {
+        var langCode = String()
+        var langName = String()
+        var langNativeName = String()
+        var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
+    }
+
+    //This is for parsing and after JSON parsing to hold final data
     struct ScriptLangDetails: Codable {
         var code = String()
         var name = String()
@@ -38,13 +39,15 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         var dir = String()
         var toScripts = [ToScripts]()
     }
+    
+    //This is for parsing and after JSON parsing to hold final data
     struct ToScripts: Codable {
         var code = String()
         var name = String()
         var nativeName = String()
         var dir = String()
     }
-    //*****end parsing structs
+    //*****end structs
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +73,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             transliterateLangDataEach.langNativeName = language.nativeName
             print("number of scriptLangDetails structs", language.scripts.count)
             
-            //*****THIS LOOP WORKS*****
             let countInScriptsArray = language.scripts.count
             
             for index1 in 0...countInScriptsArray - 1 {
@@ -92,7 +94,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
                     scriptLangDetailsSingle.toScripts.append(toScriptDetails)
                 }
                 
-                
                 transliterateLangDataEach.langScriptData.append(scriptLangDetailsSingle)
                 scriptLangDetailsSingle.toScripts.removeAll()
             }
@@ -101,8 +102,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             transliterateLangDataEach.langScriptData.removeAll()
             
         }
-        
-        print(transliterateLangData[0].langNativeName)
         
         //*****Get lang code(keyvalue) into the struct array
         let countOfLanguages = languages?.transliteration.count
