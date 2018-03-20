@@ -11,80 +11,52 @@ import UIKit
 
 class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    
     //*****this is for after parsing to hold the data
     struct TransliterationAll: Codable {
         var langCode = String()
         var langName = String()
         var langNativeName = String()
-        var langScriptData = [LangDetails]() //re-using struct from parsing
+        var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
     }
     
-    struct LangDetails: Codable {
+    //*****used in the parsing of request Json
+    struct Transliteration: Codable {
+        var transliteration = [String: LanguageNames]()
+    }
+    
+    struct LanguageNames: Codable {
+        var name = String()
+        var nativeName = String()
+        var scripts = [ScriptLangDetails]()
+    }
+    
+    struct ScriptLangDetails: Codable {
         var code = String()
         var name = String()
         var nativeName = String()
         var dir = String()
         var toScripts = [ToScripts]()
-        
-        struct ToScripts: Codable {
-            var code = String()
-            var name = String()
-            var nativeName = String()
-            var dir = String()
-        }
     }
-    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        var languages = parseTransliterate()
-//        dump(languages)
-//    }
+    struct ToScripts: Codable {
+        var code = String()
+        var name = String()
+        var nativeName = String()
+        var dir = String()
+    }
+    //*****end parsing structs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
-        //let sampleDataAddress = "https://api.myjson.com/bins/ja165" //Dictionary
-        
         let url = URL(string: sampleDataAddress)!
         let jsonData = try! Data(contentsOf: url)
         let jsonDecoder = JSONDecoder()
         
-        //*****this is for after parsing to hold the data
-        struct TransliterationAll: Codable {
-            var langCode = String()
-            var langName = String()
-            var langNativeName = String()
-            var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
-        }
-        
-        //*****used in the parsing of request Json
-        struct Transliteration: Codable {
-            var transliteration = [String: LanguageNames]()
-        }
-        
-        struct LanguageNames: Codable {
-            var name = String()
-            var nativeName = String()
-            var scripts = [ScriptLangDetails]()
-        }
-        
-        struct ScriptLangDetails: Codable {
-            var code = String()
-            var name = String()
-            var nativeName = String()
-            var dir = String()
-            var toScripts = [ToScripts]()
-        }
-        struct ToScripts: Codable {
-            var code = String()
-            var name = String()
-            var nativeName = String()
-            var dir = String()
-        }
-        //*****end parsing structs
-        
         let languages = try? jsonDecoder.decode(Transliteration.self, from: jsonData)
-        dump(languages)
+        print("*****Begin Dump")
+        //dump(languages)
+        print("*****END")
         
         //Setup struct vars
         var transliterateLangData = [TransliterationAll]()
@@ -96,31 +68,56 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             
             transliterateLangDataEach.langName = language.name
             transliterateLangDataEach.langNativeName = language.nativeName
-            print(language.scripts.count)
+            print("number of scriptLangDetails structs", language.scripts.count)
             
             //*****THIS LOOP WORKS*****
-            var countInScriptsArray = language.scripts.count
-            for index in 0...countInScriptsArray - 1 {
+            let countInScriptsArray = language.scripts.count
+            
+            for index1 in 0...countInScriptsArray - 1 {
                 //print("*****", language.scripts[index])
-                scriptLangDetailsSingle.code = language.scripts[index].code
-                scriptLangDetailsSingle.name = language.scripts[index].name
-                scriptLangDetailsSingle.nativeName = language.scripts[index].nativeName
-                scriptLangDetailsSingle.dir = language.scripts[index].dir
-                //*****ADD TO SCRIPTS LOOP TO GET THE TOSCRIPTS ARRAY DATA
-                scriptLangDetailsSingle.toScripts.append(toScriptDetails)
+                scriptLangDetailsSingle.code = language.scripts[index1].code
+                scriptLangDetailsSingle.name = language.scripts[index1].name
+                scriptLangDetailsSingle.nativeName = language.scripts[index1].nativeName
+                scriptLangDetailsSingle.dir = language.scripts[index1].dir
+                
+                let countInToScriptsArray = language.scripts[index1].toScripts.count
+                var counter = 0
+                while counter < countInToScriptsArray {
+                    toScriptDetails.code = language.scripts[index1].toScripts[counter].code
+                    toScriptDetails.name = language.scripts[index1].toScripts[counter].name
+                    toScriptDetails.nativeName = language.scripts[index1].toScripts[counter].nativeName
+                    toScriptDetails.dir = language.scripts[index1].toScripts[counter].dir
+                    print(language.scripts[index1].toScripts[counter].code)
+                    counter += 1
+                    scriptLangDetailsSingle.toScripts.append(toScriptDetails)
+                }
+                
+                
+                transliterateLangDataEach.langScriptData.append(scriptLangDetailsSingle)
+                scriptLangDetailsSingle.toScripts.removeAll()
             }
             
-
-            
-            
-            
-            //append each to array
-            transliterateLangDataEach.langScriptData.append(scriptLangDetailsSingle)
             transliterateLangData.append(transliterateLangDataEach)
+            transliterateLangDataEach.langScriptData.removeAll()
             
         }
+        
         print(transliterateLangData[0].langNativeName)
         
+        //*****Get lang code(keyvalue) into the struct array
+        let countOfLanguages = languages?.transliteration.count
+        var counter = 0
+        
+        for languageKey in languages!.transliteration.keys {
+            
+            if counter < countOfLanguages! {
+                transliterateLangData[counter].langCode = languageKey
+                //print(transliterateLangData[counter].langCode)
+                counter += 1
+            }
+        }
+        //*****end get key
+        print(transliterateLangData)
     }
     
     
