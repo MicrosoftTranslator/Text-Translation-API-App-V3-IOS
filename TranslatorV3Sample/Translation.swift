@@ -40,6 +40,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
+        textToTranslate.delegate = self
+        
         fromLangPicker.dataSource = self
         toLangPicker.dataSource = self
         fromLangPicker.delegate =  self
@@ -186,6 +188,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         print("selected row ", languageName)
     }
     
+    
+    
     //*****CODE FROM PLAYGROUND FOR GETTING LANGUAGES NEED TO MOVE SOME VARS TO CLASS VARS
     func getLanguages() {
         
@@ -228,9 +232,20 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             }
         }
         
-        //arrayLangInfo.count
-        //print(arrayLangInfo[60])
+        
         arrayLangInfo.sort(by: {$0.name < $1.name})
-        //print(arrayLangInfo)
+        
     }
+}
+
+
+extension Translation: UITextViewDelegate {
+    
+    //this clears the text view
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textToTranslate.text = ""
+    }
+    
+    
+    
 }

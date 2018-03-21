@@ -11,6 +11,9 @@ import UIKit
 
 class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    @IBOutlet weak var languageName: UIPickerView!
+    
+    
     //*****Used in the parsing of request JSON as a dictionary
     struct Transliteration: Codable {
         var transliteration = [String: LanguageNames]()
@@ -49,8 +52,19 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
     //*****end structs
     
+    //Setup struct vars
+    var transliterateLangData = [TransliterationAll]()
+    var transliterateLangDataEach = TransliterationAll()
+    var scriptLangDetailsSingle = ScriptLangDetails()
+    var toScriptDetails = ToScripts()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        languageName.delegate = self
+        languageName.dataSource = self
+        
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
         let url = URL(string: sampleDataAddress)!
         let jsonData = try! Data(contentsOf: url)
@@ -60,12 +74,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         print("*****Begin Dump")
         //dump(languages)
         print("*****END")
-        
-        //Setup struct vars
-        var transliterateLangData = [TransliterationAll]()
-        var transliterateLangDataEach = TransliterationAll()
-        var scriptLangDetailsSingle = ScriptLangDetails()
-        var toScriptDetails = ToScripts()
         
         for language in (languages?.transliteration.values)! {
             
@@ -130,10 +138,22 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 1
+        
+        let rowCount = transliterateLangData.count
+        
+        return rowCount
     }
     
-    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        var rowContent = String()
+        
+        rowContent = transliterateLangData[row].langName
+        print(rowContent)
+        
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+        
+        return attributedString
+    }
 
     
     
