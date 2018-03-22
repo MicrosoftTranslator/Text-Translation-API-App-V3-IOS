@@ -12,6 +12,12 @@ import UIKit
 class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var languageName: UIPickerView!
+    @IBOutlet weak var fromScriptBtn1: UIButton!
+    @IBOutlet weak var fromScriptBtn2: UIButton!
+    @IBOutlet weak var toScriptBtn1: UIButton!
+    @IBOutlet weak var toScriptBtn2: UIButton!
+    @IBOutlet weak var toScriptBtn3: UIButton!
+    @IBOutlet weak var toScriptBtn4: UIButton!
     
     
     //*****Used in the parsing of request JSON as a dictionary
@@ -124,7 +130,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             }
         }
         //*****end get key
-        print(transliterateLangData)
+        //print(transliterateLangData)
     }
     
     
@@ -148,13 +154,52 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         var rowContent = String()
         
         rowContent = transliterateLangData[row].langName
-        print(rowContent)
+        //print(rowContent)
         
         let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
         
         return attributedString
     }
 
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let rowNumber = row
+        print("selected row ", rowNumber) //row number is returned corresponding the the array name. Starts at 0
+        print(transliterateLangData[rowNumber].langScriptData[0].name)
+        print("count of scripts", transliterateLangData[rowNumber].langScriptData.count)
+        
+        fromScriptBtn2.setTitle(" ", for: .normal)
+        fromScriptBtn2.setTitle(" ", for: .normal)
+        toScriptBtn1.setTitle(" ", for: .normal)
+        toScriptBtn2.setTitle(" ", for: .normal)
+        toScriptBtn3.setTitle(" ", for: .normal)
+        toScriptBtn4.setTitle(" ", for: .normal)
+        
+        var scriptsCounter = 1
+        for scripts in transliterateLangData[rowNumber].langScriptData {
+            print("from scripts", scripts.code)
+
+            
+            
+            if scriptsCounter == 1 {
+                fromScriptBtn1.setTitle(scripts.name, for: .normal)
+                toScriptBtn1.setTitle(scripts.toScripts[0].name, for: .normal)
+                if scripts.toScripts.count > 1 {
+                    toScriptBtn2.setTitle(scripts.toScripts[1].name, for: .normal)
+                }
+            }
+            
+            if scriptsCounter == 2 {
+                fromScriptBtn2.setTitle(scripts.name, for: .normal)
+                toScriptBtn3.setTitle(scripts.toScripts[0].name, for: .normal)
+                if scripts.toScripts.count > 1 {
+                    toScriptBtn4.setTitle(scripts.toScripts[1].name, for: .normal)
+                }
+            }
+            scriptsCounter += 1
+            
+
+        }
+    }
     
     
     
