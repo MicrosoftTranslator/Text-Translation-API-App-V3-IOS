@@ -103,11 +103,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
             
-            print("*****this is the response from the request")
-            print("this is the response ", response!)
-            print("this is the response data ", responseData!)
-            print(String(data: responseData!, encoding: .utf8)!)
-            
             if responseError != nil {
                 print("this is the error ", responseError!)
             }

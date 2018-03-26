@@ -18,6 +18,13 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     @IBOutlet weak var toScriptBtn2: UIButton!
     @IBOutlet weak var toScriptBtn3: UIButton!
     @IBOutlet weak var toScriptBtn4: UIButton!
+    @IBOutlet weak var textToTransliterate: UITextView!
+    @IBOutlet weak var transliteratedText: UITextView!
+    var languageCode = String()
+    var fromLangScript = String()
+    var toLangScript = String()
+    let jsonEncoder = JSONEncoder()
+    
     
     
     //*****Used in the parsing of request JSON as a dictionary
@@ -58,12 +65,77 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
     //*****end structs
     
+    @IBAction func fromScriptBtn1Pressed(_ sender: Any) {
+        fromScriptBtn1.backgroundColor = UIColor.orange
+        fromScriptBtn2.backgroundColor = UIColor.lightGray
+        toScriptBtn3.backgroundColor = UIColor.lightGray
+        toScriptBtn4.backgroundColor = UIColor.lightGray
+        fromLangScript = (fromScriptBtn1.titleLabel?.text)!
+    }
+    
+    @IBAction func fromScriptBtn2Pressed(_ sender: AnyObject) {
+        
+        if fromScriptBtn2.titleLabel?.text != "--" {
+            fromScriptBtn2.backgroundColor = UIColor.orange
+            fromScriptBtn1.backgroundColor = UIColor.lightGray
+            toScriptBtn1.backgroundColor = UIColor.lightGray
+            toScriptBtn2.backgroundColor = UIColor.lightGray
+            fromLangScript = (fromScriptBtn2.titleLabel?.text)!
+        }
+    }
+    @IBAction func toScriptBtn1Pressed(_ sender: Any) {
+        
+        if fromScriptBtn2.backgroundColor != UIColor.orange {
+            toScriptBtn1.backgroundColor = UIColor.orange
+            toScriptBtn2.backgroundColor = UIColor.lightGray
+            toLangScript = (toScriptBtn1.titleLabel?.text)!
+        }
+
+    }
+    @IBAction func toScriptBtn2Pressed(_ sender: Any) {
+        
+        if fromScriptBtn2.backgroundColor != UIColor.orange {
+            if toScriptBtn2.titleLabel?.text != "--" {
+                toScriptBtn2.backgroundColor = UIColor.orange
+                toScriptBtn1.backgroundColor = UIColor.lightGray
+                toLangScript = (toScriptBtn2.titleLabel?.text)!
+            }
+        }
+
+    }
+    @IBAction func toScriptBtn3Pressed(_ sender: Any) {
+        if fromScriptBtn1.backgroundColor != UIColor.orange {
+            if toScriptBtn3.titleLabel?.text != "--" {
+                toScriptBtn3.backgroundColor = UIColor.orange
+                toScriptBtn4.backgroundColor = UIColor.lightGray
+                toLangScript = (toScriptBtn3.titleLabel?.text)!
+            }
+        }
+    }
+    @IBAction func toScriptBtn4Pressed(_ sender: Any) {
+        
+        if fromScriptBtn1.backgroundColor != UIColor.orange {
+            if toScriptBtn2.titleLabel?.text != "--" {
+                toScriptBtn4.backgroundColor = UIColor.orange
+                toScriptBtn3.backgroundColor = UIColor.lightGray
+                toLangScript = (toScriptBtn4.titleLabel?.text)!
+            }
+        }
+    }
+    
+    
     //Setup struct vars
     var transliterateLangData = [TransliterationAll]()
     var transliterateLangDataEach = TransliterationAll()
     var scriptLangDetailsSingle = ScriptLangDetails()
     var toScriptDetails = ToScripts()
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,6 +189,8 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             
         }
         
+
+        
         //*****Get lang code(keyvalue) into the struct array
         let countOfLanguages = languages?.transliteration.count
         var counter = 0
@@ -130,13 +204,108 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             }
         }
         //*****end get key
-        //print(transliterateLangData)
+        transliterateLangDataEach.langName = "--Select--"
+        transliterateLangData.insert(transliterateLangDataEach, at: 0)
     }
     
     
     
+    @IBAction func transliterateBtnWasPressed(_ sender: Any) {
+        
+        var pickerSelection = Int()
+        pickerSelection = languageName.selectedRow(inComponent: 0)
+        languageCode = transliterateLangData[pickerSelection].langCode
+        
+        //ADD THE VALUES FROM THE BUTTONS
+            
+        print("selected row ", languageCode)
+        
+        
+        //fromLangScript =
+        //let selectedFromLangCode = arrayLangInfo[fromLangCode].code
+        //let selectedToLangCode = arrayLangInfo[toLangCode].code
+        
+        struct encodeText: Codable {
+            var text = String()
+        }
+        
+        let azureKey = "31b6016565ac4e1585b1fdb688e42c6d"
+        //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
+        let contentType = "application/json"
+        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
+        let host = "dev.microsofttranslator.com"
+        let apiURL = "https://dev.microsofttranslator.com/transliterate?api-version=3.0&fromscript=" + fromLangScript + "&language=" + languageCode + "&toscript=" + toLangScript
+        
+        let text2Transliterate = textToTransliterate.text
+        var encodeTextSingle = encodeText()
+        var toTransliterate = [encodeText]()
+        
+        encodeTextSingle.text = text2Transliterate!
+        toTransliterate.append(encodeTextSingle)
+        print("struct to transliterate ", toTransliterate)
+        
+        let jsonToTransliterate = try? jsonEncoder.encode(toTransliterate)
+        let url = URL(string: apiURL)
+        var request = URLRequest(url: url!)
+        
+        request.httpMethod = "POST"
+        request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
+        request.addValue(host, forHTTPHeaderField: "Host")
+        //request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
+        request.httpBody = jsonToTransliterate
+        
+        //print(String(data: jsonToTranslate!, encoding: .utf8)!)
+        let config = URLSessionConfiguration.default
+        let session =  URLSession(configuration: config)
+        
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            
+            if responseError != nil {
+                print("this is the error ", responseError!)
+            }
+            print("1*****")
+            dump(response)
+            print("2*****")
+            dump(responseData)
+            print("3*****")
+            dump(responseError)
+            print("*******")
+            
+            self.parseJson(jsonData: responseData!)
+        }
+        task.resume()
+        
+        
+    }
+        
+    func parseJson(jsonData: Data) {
+        
+        //*****TRANSLATION RETURNED DATA*****
+        struct ReturnedJson: Codable {
+            var transliteration: [TransliteratedStrings]
+        }
+        struct TransliteratedStrings: Codable {
+            var text: String
+            var script: String
+        }
+        //THIS IS THE PROBLEM AREA TODO IT IS A PARSING ISSUE********RETURN IS CORRCET
+        let jsonDecoder = JSONDecoder()
+        let transliteration = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
+        let numberOfTransliterations = transliteration!.count - 1
+        print(transliteration!.count)
+        print("**********")
+        print("This is the translation -> ", transliteration![0].transliteration[numberOfTransliterations].text)
+        print("**********")
+        print("This is the language code -> ", transliteration![0].transliteration[numberOfTransliterations].script)
+
+        //Put response on main thread to update UI
+        DispatchQueue.main.async {
+            self.transliteratedText.text = transliteration![0].transliteration[numberOfTransliterations].text
+        }
+    }
     
-    //*****move data from languages into the three structs
     
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -154,45 +323,47 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         var rowContent = String()
         
         rowContent = transliterateLangData[row].langName
-        //print(rowContent)
         
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+        
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.darkText])
         
         return attributedString
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let rowNumber = row
-        print("selected row ", rowNumber) //row number is returned corresponding the the array name. Starts at 0
-        print(transliterateLangData[rowNumber].langScriptData[0].name)
-        print("count of scripts", transliterateLangData[rowNumber].langScriptData.count)
         
-        fromScriptBtn2.setTitle(" ", for: .normal)
-        fromScriptBtn2.setTitle(" ", for: .normal)
-        toScriptBtn1.setTitle(" ", for: .normal)
-        toScriptBtn2.setTitle(" ", for: .normal)
-        toScriptBtn3.setTitle(" ", for: .normal)
-        toScriptBtn4.setTitle(" ", for: .normal)
+        fromScriptBtn1.setTitle("--", for: .normal)
+        fromScriptBtn2.setTitle("--", for: .normal)
+        toScriptBtn1.setTitle("--", for: .normal)
+        toScriptBtn2.setTitle("--", for: .normal)
+        toScriptBtn3.setTitle("--", for: .normal)
+        toScriptBtn4.setTitle("--", for: .normal)
+        
+        fromScriptBtn1.backgroundColor = UIColor.lightGray
+        fromScriptBtn2.backgroundColor = UIColor.lightGray
+        toScriptBtn1.backgroundColor = UIColor.lightGray
+        toScriptBtn2.backgroundColor = UIColor.lightGray
+        toScriptBtn3.backgroundColor = UIColor.lightGray
+        toScriptBtn4.backgroundColor = UIColor.lightGray
         
         var scriptsCounter = 1
         for scripts in transliterateLangData[rowNumber].langScriptData {
             print("from scripts", scripts.code)
 
-            
-            
             if scriptsCounter == 1 {
-                fromScriptBtn1.setTitle(scripts.name, for: .normal)
-                toScriptBtn1.setTitle(scripts.toScripts[0].name, for: .normal)
+                fromScriptBtn1.setTitle(scripts.code, for: .normal)
+                toScriptBtn1.setTitle(scripts.toScripts[0].code, for: .normal)
                 if scripts.toScripts.count > 1 {
-                    toScriptBtn2.setTitle(scripts.toScripts[1].name, for: .normal)
+                    toScriptBtn2.setTitle(scripts.toScripts[1].code, for: .normal)
                 }
             }
             
             if scriptsCounter == 2 {
-                fromScriptBtn2.setTitle(scripts.name, for: .normal)
-                toScriptBtn3.setTitle(scripts.toScripts[0].name, for: .normal)
+                fromScriptBtn2.setTitle(scripts.code, for: .normal)
+                toScriptBtn3.setTitle(scripts.toScripts[0].code, for: .normal)
                 if scripts.toScripts.count > 1 {
-                    toScriptBtn4.setTitle(scripts.toScripts[1].name, for: .normal)
+                    toScriptBtn4.setTitle(scripts.toScripts[1].code, for: .normal)
                 }
             }
             scriptsCounter += 1
@@ -201,8 +372,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         }
     }
     
-    
-    
+
 }
 
 
