@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE43B805206B001C0062CB5E /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE43B804206B001C0062CB5E /* Dictionary.swift */; };
 		DE496B98205AE30500EB933D /* TransliterateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE496B97205AE30500EB933D /* TransliterateParsing.swift */; };
 		DE496B9A205AE4CF00EB933D /* Transliteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE496B99205AE4CF00EB933D /* Transliteration.swift */; };
 		DE71555F203613AA0028203F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE71555E203613AA0028203F /* AppDelegate.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE43B804206B001C0062CB5E /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		DE496B97205AE30500EB933D /* TransliterateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransliterateParsing.swift; sourceTree = "<group>"; };
 		DE496B99205AE4CF00EB933D /* Transliteration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transliteration.swift; sourceTree = "<group>"; };
 		DE71555B203613AA0028203F /* TranslatorV3Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TranslatorV3Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +67,7 @@
 				DE715560203613AA0028203F /* MainMenu.swift */,
 				DE71557020363A5D0028203F /* Translation.swift */,
 				DE496B97205AE30500EB933D /* TransliterateParsing.swift */,
+				DE43B804206B001C0062CB5E /* Dictionary.swift */,
 				DE496B99205AE4CF00EB933D /* Transliteration.swift */,
 				DE715565203613AA0028203F /* Assets.xcassets */,
 				DE715567203613AA0028203F /* LaunchScreen.storyboard */,
@@ -150,6 +153,7 @@
 				DE71555F203613AA0028203F /* AppDelegate.swift in Sources */,
 				DE71557120363A5D0028203F /* Translation.swift in Sources */,
 				DE496B98205AE30500EB933D /* TransliterateParsing.swift in Sources */,
+				DE43B805206B001C0062CB5E /* Dictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

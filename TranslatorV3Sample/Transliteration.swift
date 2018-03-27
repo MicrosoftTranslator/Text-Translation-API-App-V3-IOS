@@ -24,6 +24,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     var fromLangScript = String()
     var toLangScript = String()
     let jsonEncoder = JSONEncoder()
+    let jsonDecoder = JSONDecoder()
     
     
     
@@ -282,27 +283,39 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         
     func parseJson(jsonData: Data) {
         
-        //*****TRANSLATION RETURNED DATA*****
-        struct ReturnedJson: Codable {
-            var transliteration: [TransliteratedStrings]
-        }
+        //*****Transliteration returned data*****
+//        struct ReturnedJson: Codable {
+//            var transliteration: [TransliteratedStrings]
+//        }
         struct TransliteratedStrings: Codable {
             var text: String
             var script: String
         }
+        
         //THIS IS THE PROBLEM AREA TODO IT IS A PARSING ISSUE********RETURN IS CORRCET
-        let jsonDecoder = JSONDecoder()
-        let transliteration = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
-        let numberOfTransliterations = transliteration!.count - 1
+        
+        //let returnedJson = [TransliteratedStrings]()
+        let transliteration = try? self.jsonDecoder.decode(Array<TransliteratedStrings>.self, from: jsonData)
+        
+        var numberOfTransliterations = Int()
+        
+        if transliteration?.count == nil {
+            print("zero items returned")
+            return
+        } else {
+            numberOfTransliterations = transliteration!.count - 1
+        }
+        
         print(transliteration!.count)
         print("**********")
-        print("This is the translation -> ", transliteration![0].transliteration[numberOfTransliterations].text)
+        print("this is the transliteration", transliteration![0].text)
+        //print("This is the translation -> ", transliteration![0].transliteration[numberOfTransliterations].text)
         print("**********")
-        print("This is the language code -> ", transliteration![0].transliteration[numberOfTransliterations].script)
+        //print("This is the language code -> ", transliteration![0].transliteration[numberOfTransliterations].script)
 
         //Put response on main thread to update UI
         DispatchQueue.main.async {
-            self.transliteratedText.text = transliteration![0].transliteration[numberOfTransliterations].text
+            self.transliteratedText.text = transliteration![numberOfTransliterations].text
         }
     }
     
