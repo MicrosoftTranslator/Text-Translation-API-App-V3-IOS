@@ -28,7 +28,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     
     
     
-    //*****Used in the parsing of request JSON as a dictionary
+    //*****Structs for parsing JSON from Languages
     struct Transliteration: Codable {
         var transliteration = [String: LanguageNames]()
     }
@@ -48,7 +48,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
     }
 
-    //This is for parsing and after JSON parsing to hold final data
+    //This is for parsing JSON from Languages, and after JSON parsing to hold final data
     struct ScriptLangDetails: Codable {
         var code = String()
         var name = String()
