@@ -55,73 +55,53 @@ class Dictionary: UIViewController {
         let url = URL(string: sampleDataAddress)!
         let jsonData = try! Data(contentsOf: url)
         let jsonDecoder = JSONDecoder()
-        
         let languages = try? jsonDecoder.decode(Dictionary.self, from: jsonData)
-        print("*****Begin Dump")
-        //dump(languages)
-        print("*****END")
         
         for language in (languages?.dictionary.values)! {
             
-            dictionaryLangEach.dictionary. = language.name
-            transliterateLangDataEach.langNativeName = language.nativeName
-            print("number of scriptLangDetails structs", language.scripts.count)
+            dictionaryLangEach.langName = language.name
+            dictionaryLangEach.langNativeName = language.nativeName
+            dictionaryLangEach.langDir = language.dir
+            print("number of scriptLangDetails structs", language.translations.count)
             
-            let countInScriptsArray = language.scripts.count
+            let countTranslationsArray = language.translations.count
             
-            for index1 in 0...countInScriptsArray - 1 {
+            for index1 in 0...countTranslationsArray - 1 {
                 //print("*****", language.scripts[index])
-                scriptLangDetailsSingle.code = language.scripts[index1].code
-                scriptLangDetailsSingle.name = language.scripts[index1].name
-                scriptLangDetailsSingle.nativeName = language.scripts[index1].nativeName
-                scriptLangDetailsSingle.dir = language.scripts[index1].dir
+                dictionaryTranslationTo.name = language.translations[index1].name
+                dictionaryTranslationTo.nativeName = language.translations[index1].nativeName
+                dictionaryTranslationTo.dir = language.translations[index1].dir
+                dictionaryTranslationTo.code = language.translations[index1].code
                 
-                let countInToScriptsArray = language.scripts[index1].toScripts.count
-                var counter = 0
-                while counter < countInToScriptsArray {
-                    toScriptDetails.code = language.scripts[index1].toScripts[counter].code
-                    toScriptDetails.name = language.scripts[index1].toScripts[counter].name
-                    toScriptDetails.nativeName = language.scripts[index1].toScripts[counter].nativeName
-                    toScriptDetails.dir = language.scripts[index1].toScripts[counter].dir
-                    print(language.scripts[index1].toScripts[counter].code)
-                    counter += 1
-                    scriptLangDetailsSingle.toScripts.append(toScriptDetails)
-                }
-                
-                transliterateLangDataEach.langScriptData.append(scriptLangDetailsSingle)
-                scriptLangDetailsSingle.toScripts.removeAll()
+                dictionaryLangEach.langTranslations.append(dictionaryTranslationTo)
             }
-            
-            transliterateLangData.append(transliterateLangDataEach)
-            transliterateLangDataEach.langScriptData.removeAll()
-            
+            dictionaryLangArray.append(dictionaryLangEach)
+            dictionaryLangEach.langTranslations.removeAll()
         }
         
-        
-        
         //*****Get lang code(keyvalue) into the struct array
-        let countOfLanguages = languages?.transliteration.count
+        let countOfLanguages = languages?.dictionary.count
+        //let countOfLanguages = languages?.transliteration.count
         var counter = 0
         
-        for languageKey in languages!.transliteration.keys {
+        for languageKey in languages!.dictionary.keys {
             
             if counter < countOfLanguages! {
-                transliterateLangData[counter].langCode = languageKey
-                //print(transliterateLangData[counter].langCode)
+                dictionaryLangArray[counter].langCode = languageKey
+                print(languageKey)
                 counter += 1
             }
         }
         //*****end get key
-        transliterateLangDataEach.langName = "--Select--"
-        transliterateLangData.insert(transliterateLangDataEach, at: 0)
-    }
+        //transliterateLangDataEach.langName = "--Select--"
+        //transliterateLangData.insert(transliterateLangDataEach, at: 0)
+        print(dictionaryLangArray)
+        
+        dictionaryLangArray.sort(by: {$0.langName < $1.langName})
         
     }
     
-    
-    
-    
-}
+} //end class
 
 
 
