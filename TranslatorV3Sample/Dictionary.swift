@@ -9,8 +9,14 @@
 import Foundation
 import UIKit
 
-class Dictionary: UIViewController {
+class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+
     
+    
+    @IBOutlet weak var fromLanguage: UIPickerView!
+    @IBOutlet weak var toLanguage: UIPickerView!
+    @IBOutlet weak var textToSubmitTxt: UITextField!
+    @IBOutlet weak var textReturnedTxtView: UITextView!
     
     //*****Structs for parsing JSON from Languages
     struct Dictionary: Codable {
@@ -46,10 +52,29 @@ class Dictionary: UIViewController {
     var dictionaryLangArray = [DictionaryLanguages]()
     var dictionaryLangEach = DictionaryLanguages()
     var dictionaryTranslationTo = TranslationsTo()
+    var firstPickerRowSelected = Int()
+    var secondLanguageArray = [TranslationsTo]()
+    
+    @IBAction func lookupBtnPressed(_ sender: Any) {
+        
+        
+    }
+    
+    @IBAction func exampleBtnPressed(_ sender: Any) {
+        
+        
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fromLanguage.dataSource = self
+        fromLanguage.delegate = self
+        toLanguage.dataSource = self
+        toLanguage.delegate = self
+        
+        
         
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary" //transliteration
         let url = URL(string: sampleDataAddress)!
@@ -81,7 +106,7 @@ class Dictionary: UIViewController {
         
         //*****Get lang code(keyvalue) into the struct array
         let countOfLanguages = languages?.dictionary.count
-        //let countOfLanguages = languages?.transliteration.count
+        
         var counter = 0
         
         for languageKey in languages!.dictionary.keys {
@@ -93,12 +118,52 @@ class Dictionary: UIViewController {
             }
         }
         //*****end get key
-        //transliterateLangDataEach.langName = "--Select--"
-        //transliterateLangData.insert(transliterateLangDataEach, at: 0)
-        print(dictionaryLangArray)
+        //print(dictionaryLangArray)
         
         dictionaryLangArray.sort(by: {$0.langName < $1.langName})
+        dictionaryLangEach.langNativeName = "--Select--"
+        dictionaryLangArray.insert(dictionaryLangEach, at: 0)
+
+        secondLanguageArray = (dictionaryLangArray.first?.langTranslations)!
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
+        if pickerView == fromLanguage {
+            return dictionaryLangArray.count
+        } else if pickerView == toLanguage {
+            
+            return secondLanguageArray.count
+            
+        } else {
+            return 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView == fromLanguage {
+            firstPickerRowSelected = row
+            secondLanguageArray = dictionaryLangArray[row].langTranslations
+            toLanguage.reloadComponent(0)
+            print(firstPickerRowSelected)
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if pickerView == fromLanguage {
+            return dictionaryLangArray[row].langNativeName
+        } else if pickerView == toLanguage {
+             return secondLanguageArray[row].nativeName
+        }
+        else {
+            return "not found"
+        }
     }
     
 } //end class
