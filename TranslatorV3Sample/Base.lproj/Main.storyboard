@@ -61,7 +61,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jtH-jA-OxK" secondAttribute="trailing" constant="16" id="7bh-aL-bb0"/>
                             <constraint firstItem="5wU-eD-u45" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Hem-G8-XhI"/>
@@ -111,6 +111,7 @@
                             </textView>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pTm-fP-VMM">
                                 <rect key="frame" x="16" y="129" width="343" height="80"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="d6F-Yj-UqB"/>
                                 </constraints>
@@ -247,6 +248,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="CLo-qh-FWR" firstAttribute="top" secondItem="pTm-fP-VMM" secondAttribute="bottom" constant="30" id="0I6-fJ-sWS"/>
                             <constraint firstItem="TwU-gI-RfO" firstAttribute="top" secondItem="pTm-fP-VMM" secondAttribute="bottom" constant="25" id="6O1-C3-hUi"/>

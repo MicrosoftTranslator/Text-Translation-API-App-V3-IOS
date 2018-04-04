@@ -131,12 +131,12 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     var scriptLangDetailsSingle = ScriptLangDetails()
     var toScriptDetails = ToScripts()
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-        
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(false)
+//
+//
+//
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,10 +222,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         print("selected row ", languageCode)
         
         
-        //fromLangScript =
-        //let selectedFromLangCode = arrayLangInfo[fromLangCode].code
-        //let selectedToLangCode = arrayLangInfo[toLangCode].code
-        
         struct encodeText: Codable {
             var text = String()
         }
@@ -254,7 +250,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
         request.addValue(host, forHTTPHeaderField: "Host")
-        //request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
         request.httpBody = jsonToTransliterate
         
         //print(String(data: jsonToTranslate!, encoding: .utf8)!)
@@ -266,14 +261,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             if responseError != nil {
                 print("this is the error ", responseError!)
             }
-            print("1*****")
-            dump(response)
-            print("2*****")
-            dump(responseData)
-            print("3*****")
-            dump(responseError)
-            print("*******")
-            
+
             self.parseJson(jsonData: responseData!)
         }
         task.resume()
@@ -284,17 +272,12 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     func parseJson(jsonData: Data) {
         
         //*****Transliteration returned data*****
-//        struct ReturnedJson: Codable {
-//            var transliteration: [TransliteratedStrings]
-//        }
+
         struct TransliteratedStrings: Codable {
             var text: String
             var script: String
         }
         
-        //THIS IS THE PROBLEM AREA TODO IT IS A PARSING ISSUE********RETURN IS CORRCET
-        
-        //let returnedJson = [TransliteratedStrings]()
         let transliteration = try? self.jsonDecoder.decode(Array<TransliteratedStrings>.self, from: jsonData)
         
         var numberOfTransliterations = Int()
@@ -307,18 +290,12 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         }
         
         print(transliteration!.count)
-        print("**********")
-        print("this is the transliteration", transliteration![0].text)
-        //print("This is the translation -> ", transliteration![0].transliteration[numberOfTransliterations].text)
-        print("**********")
-        //print("This is the language code -> ", transliteration![0].transliteration[numberOfTransliterations].script)
 
         //Put response on main thread to update UI
         DispatchQueue.main.async {
             self.transliteratedText.text = transliteration![numberOfTransliterations].text
         }
     }
-    
     
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -338,7 +315,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         rowContent = transliterateLangData[row].langName
         
         
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.darkText])
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.black])
         
         return attributedString
     }
@@ -381,11 +358,8 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             }
             scriptsCounter += 1
             
-
         }
     }
-    
-
 }
 
 

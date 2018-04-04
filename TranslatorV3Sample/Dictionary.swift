@@ -11,12 +11,19 @@ import UIKit
 
 class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    
+    //*****TODO CHANGE THE UI TO DISABLE THE EXAMPLE BUTTON UNTIL THE LOOKUP BUTTON HAS BEEN PRESSED, NO TITLE. IF THE EXAMPLE BUTTON IS VISIBLE AND PRESSED THEN USE THE RETURNED DATA FROM THE LOOKUP AS THE INPUT FOR THE EXAMPLE AND DISPLAY THE EXAMPLE BELOW THE LOOKUP OR IN PLACE OF THE LOOKUP.
     
     @IBOutlet weak var fromLanguage: UIPickerView!
     @IBOutlet weak var toLanguage: UIPickerView!
     @IBOutlet weak var textToSubmitTxt: UITextField!
     @IBOutlet weak var textReturnedTxtView: UITextView!
+    
+    var dictionaryLangArray = [DictionaryLanguages]()
+    var dictionaryLangEach = DictionaryLanguages()
+    var dictionaryTranslationTo = TranslationsTo()
+    var firstPickerRowSelected = Int()
+    var secondLanguageArray = [TranslationsTo]()
+    let jsonEncoder = JSONEncoder()
     
     //*****Structs for parsing JSON from Languages
     struct Dictionary: Codable {
@@ -49,22 +56,18 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     //*****End Struct for parsed data
     
-    var dictionaryLangArray = [DictionaryLanguages]()
-    var dictionaryLangEach = DictionaryLanguages()
-    var dictionaryTranslationTo = TranslationsTo()
-    var firstPickerRowSelected = Int()
-    var secondLanguageArray = [TranslationsTo]()
+
     
     @IBAction func lookupBtnPressed(_ sender: Any) {
         
+        sendRequest(typeOfRequest: "lookup")
         
     }
     
     @IBAction func exampleBtnPressed(_ sender: Any) {
         
-        
+        sendRequest(typeOfRequest: "example")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -164,6 +167,89 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         else {
             return "not found"
         }
+    }
+   
+    func sendRequest(typeOfRequest: String) {
+        
+        let fromLangCode = self.fromLanguage.selectedRow(inComponent: 0)
+        let toLangCode = self.toLanguage.selectedRow(inComponent: 0)
+        
+        print("this is the selected language code ->", dictionaryLangArray[fromLangCode].langCode)
+        
+        let selectedFromLangCode = dictionaryLangArray[fromLangCode].langCode
+        let selectedToLangCode = dictionaryLangArray[fromLangCode].langTranslations[toLangCode].code
+        
+        struct encodeText: Codable {
+            var text = String()
+        }
+        
+        let azureKey = "31b6016565ac4e1585b1fdb688e42c6d"
+        //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
+        let contentType = "application/json"
+        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
+        let host = "dev.microsofttranslator.com"
+        let apiURL = "https://dev.microsofttranslator.com/dictionary/" + typeOfRequest + "?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
+        
+        let text2Translate = textToSubmitTxt.text
+        var encodeTextSingle = encodeText()
+        var toTranslate = [encodeText]()
+        encodeTextSingle.text = text2Translate!
+        toTranslate.append(encodeTextSingle)
+        print("text to translator for dictionary ", toTranslate)
+        let jsonToTranslate = try? jsonEncoder.encode(toTranslate)
+        let url = URL(string: apiURL)
+        var request = URLRequest(url: url!)
+        
+        request.httpMethod = "POST"
+        request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
+        request.addValue(host, forHTTPHeaderField: "Host")
+        request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
+        request.httpBody = jsonToTranslate
+        
+        //print(String(data: jsonToTranslate!, encoding: .utf8)!)
+        let config = URLSessionConfiguration.default
+        let session =  URLSession(configuration: config)
+        
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            
+            if responseError != nil {
+                print("this is the error ", responseError!)
+            }
+            print("*****")
+            print(response!)
+            dump(responseData!)
+            self.parseJson(jsonData: responseData!, typeOfRequest: typeOfRequest)
+        }
+        task.resume()
+    }
+    
+    func parseJson(jsonData: Data, typeOfRequest: String) {
+        let jsonDecoder = JSONDecoder()
+        
+        
+        
+        
+        if typeOfRequest == "example" {
+            let dictionaryTranslationsExample = try? jsonDecoder.decode(Array<ResponseJsonExample>.self, from: jsonData)
+            
+        }
+        
+        if typeOfRequest == "lookup" {
+            let dictionaryTranslationsLookup = try? jsonDecoder.decode(Array<ResponseJsonLookup>.self, from: jsonData)
+            
+            print(dictionaryTranslationsLookup!.count)
+            
+            //Put response on main thread to update UI
+            DispatchQueue.main.async {
+                self.textReturnedTxtView.text = "Source word: " + dictionaryTranslationsLookup![0].normalizedSource + "\n"
+                self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Translations: " + dictionaryTranslationsLookup![0].translations[0].normalizedTarget) + "\n"
+                self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Grammar: " + dictionaryTranslationsLookup![0].translations[0].posTag) + "\n"
+            }
+        }
+        
+
     }
     
 } //end class

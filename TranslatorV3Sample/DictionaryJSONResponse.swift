@@ -42,7 +42,7 @@ struct ResponseJsonLookup: Codable {
 struct ResponseLookups: Codable {
     var normalizedTarget = String()
     var displayTarget = String()
-    var postTag = String()
+    var posTag = String()
     var confidence = Float()
     var prefixWord = String()
     var backTranslations = [ResponseBackTranslations]()

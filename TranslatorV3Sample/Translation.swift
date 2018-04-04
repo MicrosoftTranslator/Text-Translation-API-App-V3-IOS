@@ -110,8 +110,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             self.parseJson(jsonData: responseData!)
         }
         task.resume()
-
-        
     }
     
     
@@ -132,10 +130,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
         let numberOfTranslations = langTranslations!.count - 1
         print(langTranslations!.count)
-        print("**********")
-        print("This is the translation -> ", langTranslations![0].translations[numberOfTranslations].text)
-        print("**********")
-        print("This is the language code -> ", langTranslations![0].translations[numberOfTranslations].to)
         
         //Put response on main thread to update UI
         DispatchQueue.main.async {
