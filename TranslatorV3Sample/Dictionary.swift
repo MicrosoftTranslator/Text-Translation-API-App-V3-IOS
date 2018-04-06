@@ -11,12 +11,15 @@ import UIKit
 
 class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    //*****TODO CHANGE THE UI TO DISABLE THE EXAMPLE BUTTON UNTIL THE LOOKUP BUTTON HAS BEEN PRESSED, NO TITLE. IF THE EXAMPLE BUTTON IS VISIBLE AND PRESSED THEN USE THE RETURNED DATA FROM THE LOOKUP AS THE INPUT FOR THE EXAMPLE AND DISPLAY THE EXAMPLE BELOW THE LOOKUP OR IN PLACE OF THE LOOKUP.
+    //*****TODO IF THE EXAMPLE BUTTON IS VISIBLE AND PRESSED THEN USE THE RETURNED DATA FROM THE LOOKUP AS THE INPUT FOR THE EXAMPLE AND DISPLAY THE EXAMPLE BELOW THE LOOKUP OR IN PLACE OF THE LOOKUP.
+    
     
     @IBOutlet weak var fromLanguage: UIPickerView!
     @IBOutlet weak var toLanguage: UIPickerView!
     @IBOutlet weak var textToSubmitTxt: UITextField!
     @IBOutlet weak var textReturnedTxtView: UITextView!
+    @IBOutlet weak var exampleBtn: UIButton!
+    @IBOutlet weak var lookupBtn: UIButton!
     
     var dictionaryLangArray = [DictionaryLanguages]()
     var dictionaryLangEach = DictionaryLanguages()
@@ -24,6 +27,8 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     var firstPickerRowSelected = Int()
     var secondLanguageArray = [TranslationsTo]()
     let jsonEncoder = JSONEncoder()
+    var exampleText = String()
+    var exampleTranslation = String()
     
     //*****Structs for parsing JSON from Languages
     struct Dictionary: Codable {
@@ -61,22 +66,28 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     @IBAction func lookupBtnPressed(_ sender: Any) {
         
         sendRequest(typeOfRequest: "lookup")
+        textToSubmitTxt.resignFirstResponder()
+        exampleBtn.isHidden = false
         
     }
     
     @IBAction func exampleBtnPressed(_ sender: Any) {
         
-        sendRequest(typeOfRequest: "example")
+        sendRequest(typeOfRequest: "examples")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        textToSubmitTxt.delegate = self
         
         fromLanguage.dataSource = self
         fromLanguage.delegate = self
         toLanguage.dataSource = self
         toLanguage.delegate = self
         
+        exampleBtn.isHidden = true
+        lookupBtn.isHidden = true //hide the button until a selection is made
         
         
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary" //transliteration
@@ -149,6 +160,8 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
+        lookupBtn.isHidden = false //unhide after row selected
+        
         if pickerView == fromLanguage {
             firstPickerRowSelected = row
             secondLanguageArray = dictionaryLangArray[row].langTranslations
@@ -174,13 +187,17 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         let fromLangCode = self.fromLanguage.selectedRow(inComponent: 0)
         let toLangCode = self.toLanguage.selectedRow(inComponent: 0)
         
-        print("this is the selected language code ->", dictionaryLangArray[fromLangCode].langCode)
-        
         let selectedFromLangCode = dictionaryLangArray[fromLangCode].langCode
         let selectedToLangCode = dictionaryLangArray[fromLangCode].langTranslations[toLangCode].code
         
-        struct encodeText: Codable {
+        struct EncodeLookupText: Codable {
             var text = String()
+        }
+        
+        struct EncodeExampleText: Codable {
+            var text = String()
+            var translation = String()
+            
         }
         
         let azureKey = "31b6016565ac4e1585b1fdb688e42c6d"
@@ -190,15 +207,39 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         let host = "dev.microsofttranslator.com"
         let apiURL = "https://dev.microsofttranslator.com/dictionary/" + typeOfRequest + "?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
         
-        let text2Translate = textToSubmitTxt.text
-        var encodeTextSingle = encodeText()
-        var toTranslate = [encodeText]()
-        encodeTextSingle.text = text2Translate!
-        toTranslate.append(encodeTextSingle)
-        print("text to translator for dictionary ", toTranslate)
-        let jsonToTranslate = try? jsonEncoder.encode(toTranslate)
+        //get text from UItext field
+        let lookupText2Translate = textToSubmitTxt.text
+        
+        //Create instances of Structs for encoding
+        var encodeLookupTextSingle = EncodeLookupText()
+        var encodeLookupText = [EncodeLookupText]()
+        var encodeExampleTextSingle = EncodeExampleText()
+        var encodeExampleText = [EncodeExampleText]()
+        
+        //add data to the example struct
+        encodeExampleTextSingle.text = exampleText
+        encodeExampleTextSingle.translation = exampleTranslation
+        encodeExampleText.append(encodeExampleTextSingle)
+        
+        //add data to the lookup struct
+        encodeLookupTextSingle.text = lookupText2Translate!
+        encodeLookupText.append(encodeLookupTextSingle)
+        
+        //setup the URL
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
+        var jsonToTranslate = try? jsonEncoder.encode(encodeLookupText)
+        
+        if typeOfRequest == "lookup" {
+            jsonToTranslate = try? jsonEncoder.encode(encodeLookupText)
+
+        }
+        
+        if typeOfRequest == "examples" {
+            jsonToTranslate = try? jsonEncoder.encode(encodeExampleText)
+        }
+        
+
         
         request.httpMethod = "POST"
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
@@ -217,42 +258,74 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             if responseError != nil {
                 print("this is the error ", responseError!)
             }
-            print("*****")
-            print(response!)
-            dump(responseData!)
+            
+            //call the parser
             self.parseJson(jsonData: responseData!, typeOfRequest: typeOfRequest)
         }
-        task.resume()
+        task.resume() //run the setup task
     }
     
     func parseJson(jsonData: Data, typeOfRequest: String) {
+        
         let jsonDecoder = JSONDecoder()
         
-        
-        
-        
-        if typeOfRequest == "example" {
+        if typeOfRequest == "examples" {
             let dictionaryTranslationsExample = try? jsonDecoder.decode(Array<ResponseJsonExample>.self, from: jsonData)
             
+            DispatchQueue.main.async {
+                
+                if dictionaryTranslationsExample?.count != 0 && dictionaryTranslationsExample?[0].examples.count != 0 {
+                    
+                    let sourcePrefix = dictionaryTranslationsExample![0].examples[0].sourcePrefix
+                    let sourceTerm = dictionaryTranslationsExample![0].examples[0].sourceTerm
+                    let sourceSuffix = dictionaryTranslationsExample![0].examples[0].sourceSuffix
+                        
+                    let targetPrefix = dictionaryTranslationsExample![0].examples[0].targetPrefix
+                    let targetTerm = dictionaryTranslationsExample![0].examples[0].targetTerm
+                    let targetSuffix = dictionaryTranslationsExample![0].examples[0].targetSuffix
+                    
+                    self.textReturnedTxtView.text = "Source word: " + dictionaryTranslationsExample![0].normalizedSource + "\n"
+                    self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Target word: " + dictionaryTranslationsExample![0].normalizedTarget) + "\n \n"
+                    self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending(sourcePrefix + sourceTerm + sourceSuffix) + "\n"
+                    self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending(targetPrefix + targetTerm + targetSuffix) + "\n"
+
+                } else {
+                    self.textReturnedTxtView.text = "No Examples Found"
+                }
+                
+            }
         }
         
         if typeOfRequest == "lookup" {
             let dictionaryTranslationsLookup = try? jsonDecoder.decode(Array<ResponseJsonLookup>.self, from: jsonData)
             
-            print(dictionaryTranslationsLookup!.count)
-            
-            //Put response on main thread to update UI
             DispatchQueue.main.async {
-                self.textReturnedTxtView.text = "Source word: " + dictionaryTranslationsLookup![0].normalizedSource + "\n"
-                self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Translations: " + dictionaryTranslationsLookup![0].translations[0].normalizedTarget) + "\n"
-                self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Grammar: " + dictionaryTranslationsLookup![0].translations[0].posTag) + "\n"
+                
+                if dictionaryTranslationsLookup?.count != 0 && dictionaryTranslationsLookup![0].translations.count != 0 {
+                    self.exampleText = dictionaryTranslationsLookup![0].normalizedSource
+                    self.exampleTranslation = dictionaryTranslationsLookup![0].translations[0].normalizedTarget
+                    
+                    self.textReturnedTxtView.text = "Source word: " + dictionaryTranslationsLookup![0].normalizedSource + "\n"
+                    self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Translations: " + dictionaryTranslationsLookup![0].translations[0].normalizedTarget) + "\n"
+                    self.textReturnedTxtView.text = self.textReturnedTxtView.text.appending("Grammar: " + dictionaryTranslationsLookup![0].translations[0].posTag) + "\n"
+                } else {
+                    self.textReturnedTxtView.text = "No data found"
+                }
             }
         }
-        
-
     }
     
 } //end class
+
+
+extension Dictionary: UITextFieldDelegate {
+    
+    //this clears the text view
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textToSubmitTxt.text = ""
+    }
+    
+}
 
 
 

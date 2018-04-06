@@ -20,6 +20,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     @IBOutlet weak var toScriptBtn4: UIButton!
     @IBOutlet weak var textToTransliterate: UITextView!
     @IBOutlet weak var transliteratedText: UITextView!
+    
     var languageCode = String()
     var fromLangScript = String()
     var toLangScript = String()
@@ -141,6 +142,9 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textToTransliterate.delegate = self
+        self.hideKeyboardWhenTappedAround()
+        
         languageName.delegate = self
         languageName.dataSource = self
         
@@ -209,7 +213,10 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         transliterateLangData.insert(transliterateLangDataEach, at: 0)
     }
     
-    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     @IBAction func transliterateBtnWasPressed(_ sender: Any) {
         
@@ -217,7 +224,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         pickerSelection = languageName.selectedRow(inComponent: 0)
         languageCode = transliterateLangData[pickerSelection].langCode
         
-        //ADD THE VALUES FROM THE BUTTONS
+        textToTransliterate.resignFirstResponder()
             
         print("selected row ", languageCode)
         
@@ -362,7 +369,14 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
 }
 
-
+extension Transliteration: UITextViewDelegate {
+    
+    //this clears the text view
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textToTransliterate.text = ""
+    }
+    
+}
 
 
 

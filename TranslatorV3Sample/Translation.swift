@@ -38,9 +38,9 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
         
         textToTranslate.delegate = self
+        self.hideKeyboardWhenTappedAround()
         
         fromLangPicker.dataSource = self
         toLangPicker.dataSource = self
@@ -167,7 +167,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             rowContent = arrayLangInfo[row].name
         }
         
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.blue])
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
         
         return attributedString
     }
@@ -235,6 +235,16 @@ extension Translation: UITextViewDelegate {
         textToTranslate.text = ""
     }
     
-    
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
