@@ -48,7 +48,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         toLangPicker.delegate = self
         
         getLanguages()
-        usleep(500000)
+        
     }
     
     override func didReceiveMemoryWarning() {

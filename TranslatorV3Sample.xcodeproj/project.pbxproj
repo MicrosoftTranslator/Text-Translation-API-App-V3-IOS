@@ -297,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF5AMEJL94;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -312,6 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF5AMEJL94;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
