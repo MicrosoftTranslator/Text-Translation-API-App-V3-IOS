@@ -20,11 +20,13 @@ struct Transliterate: Codable {
     var transliterate = [String: LanguageNames]()
 }
 
+
 struct LanguageNames: Codable {
     var name = String()
     var nativeName = String()
     var scripts = [ScriptLangDetails]()
 }
+
 
 struct ScriptLangDetails: Codable {
     var code = String()
