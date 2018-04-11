@@ -135,9 +135,11 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         }
     }
     
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
@@ -150,6 +152,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         }
         return rowCount
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         var rowContent = String()
