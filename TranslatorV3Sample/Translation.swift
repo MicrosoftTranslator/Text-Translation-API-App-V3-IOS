@@ -13,23 +13,23 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     var fromLangCode = Int()
     var toLangCode = Int()
+    var arrayLangInfo = [AllLangDetails]() //array of structs for language info
+    let jsonEncoder = JSONEncoder()
     
-    //*****used after parsing need to put into an array of structs
+    //*****used after parsing to create an array of structs with language information
     struct AllLangDetails: Codable {
         var code = String()
         var name = String()
         var nativeName = String()
         var dir = String()
     }
-    var arrayLangInfo = [AllLangDetails]() //array of structs for language info
     
-    //*****Formatting JSON for body of request
+    
+    //*****Format JSON for body of translation request
     struct TranslatedStrings: Codable {
         var text: String
         var to: String
     }
-    
-    let jsonEncoder = JSONEncoder()
     
     @IBOutlet weak var fromLangPicker: UIPickerView!
     @IBOutlet weak var toLangPicker: UIPickerView!
@@ -113,8 +113,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     }
     
     
-    //*****Class Methods
-    
     func parseJson(jsonData: Data) {
         
         //*****TRANSLATION RETURNED DATA*****
@@ -178,7 +176,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     }
     
     
-    
     //*****CODE FROM PLAYGROUND FOR GETTING LANGUAGES NEED TO MOVE SOME VARS TO CLASS VARS
     func getLanguages() {
         
@@ -200,7 +197,9 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         //*****
         
         let jsonDecoder1 = JSONDecoder()
-        let languages = try? jsonDecoder1.decode(Translation.self, from: jsonLangData)
+        var languages: Translation?
+        
+        languages = try! jsonDecoder1.decode(Translation.self, from: jsonLangData)
         var eachLangInfo = AllLangDetails(code: " ", name: " ", nativeName: " ", dir: " ") //Use this instance to populate and then append to the array instance
         
         for languageValues in languages!.translation.values {
@@ -222,7 +221,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         }
         
         
-        arrayLangInfo.sort(by: {$0.name < $1.name})
+        arrayLangInfo.sort(by: {$0.name < $1.name}) //sort the structs based on the language name
         
     }
 }
