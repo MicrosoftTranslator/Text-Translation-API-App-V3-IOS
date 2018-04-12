@@ -11,9 +11,6 @@ import UIKit
 
 class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    //*****TODO IF THE EXAMPLE BUTTON IS VISIBLE AND PRESSED THEN USE THE RETURNED DATA FROM THE LOOKUP AS THE INPUT FOR THE EXAMPLE AND DISPLAY THE EXAMPLE BELOW THE LOOKUP OR IN PLACE OF THE LOOKUP.
-    
-    
     @IBOutlet weak var fromLanguage: UIPickerView!
     @IBOutlet weak var toLanguage: UIPickerView!
     @IBOutlet weak var textToSubmitTxt: UITextField!
@@ -47,11 +44,10 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         var nativeName = String()
         var dir = String()
         var code = String()
-
     }
     //*****End struct for languages parsing
     
-    //*****Struct for data after parsing
+    //*****Struct for data after json parsing
     struct DictionaryLanguages: Codable {
         var langCode = String()
         var langName = String()
@@ -62,7 +58,6 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     //*****End Struct for parsed data
     
 
-    
     @IBAction func lookupBtnPressed(_ sender: Any) {
         
         sendRequest(typeOfRequest: "lookup")
@@ -132,7 +127,6 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             }
         }
         //*****end get key
-        //print(dictionaryLangArray)
         
         dictionaryLangArray.sort(by: {$0.langName < $1.langName})
         dictionaryLangEach.langNativeName = "--Select--"
@@ -239,8 +233,6 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             jsonToTranslate = try? jsonEncoder.encode(encodeExampleText)
         }
         
-
-        
         request.httpMethod = "POST"
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
@@ -249,7 +241,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
         request.httpBody = jsonToTranslate
         
-        //print(String(data: jsonToTranslate!, encoding: .utf8)!)
+        
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
         
@@ -257,6 +249,12 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             
             if responseError != nil {
                 print("this is the error ", responseError!)
+                
+                let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
             }
             
             //call the parser

@@ -132,13 +132,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     var scriptLangDetailsSingle = ScriptLangDetails()
     var toScriptDetails = ToScripts()
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(false)
-//
-//
-//
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -167,7 +160,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             let countInScriptsArray = language.scripts.count
             
             for index1 in 0...countInScriptsArray - 1 {
-                //print("*****", language.scripts[index])
+                
                 scriptLangDetailsSingle.code = language.scripts[index1].code
                 scriptLangDetailsSingle.name = language.scripts[index1].name
                 scriptLangDetailsSingle.nativeName = language.scripts[index1].nativeName
@@ -194,7 +187,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             
         }
         
-
         
         //*****Get lang code(keyvalue) into the struct array
         let countOfLanguages = languages?.transliteration.count
@@ -225,9 +217,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         languageCode = transliterateLangData[pickerSelection].langCode
         
         textToTransliterate.resignFirstResponder()
-            
-        print("selected row ", languageCode)
-        
         
         struct encodeText: Codable {
             var text = String()
@@ -267,6 +256,12 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             
             if responseError != nil {
                 print("this is the error ", responseError!)
+                
+                let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
             }
 
             self.parseJson(jsonData: responseData!)

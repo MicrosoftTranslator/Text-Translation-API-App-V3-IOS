@@ -82,6 +82,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         let text2Translate = textToTranslate.text
         var encodeTextSingle = encodeText()
         var toTranslate = [encodeText]()
+        
         encodeTextSingle.text = text2Translate!
         toTranslate.append(encodeTextSingle)
         
@@ -97,7 +98,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
         request.httpBody = jsonToTranslate
         
-        //print(String(data: jsonToTranslate!, encoding: .utf8)!)
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
         
@@ -105,6 +105,13 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             
             if responseError != nil {
                 print("this is the error ", responseError!)
+                
+                let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
+                
             }
             print("*****")
             self.parseJson(jsonData: responseData!)

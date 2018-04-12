@@ -13,16 +13,13 @@ class MainMenu: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
     
 //    *****Segue to viewcontrollers are managed by the navigation controller.
-
 }
 
 extension UIViewController {
@@ -30,7 +27,6 @@ extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
     }
     
     @objc func dismissKeyboard() {
