@@ -21,12 +21,17 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     @IBOutlet weak var textToTransliterate: UITextView!
     @IBOutlet weak var transliteratedText: UITextView!
     
+    
     var languageCode = String()
     var fromLangScript = String()
     var toLangScript = String()
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
-    
+    //Setup struct vars
+    var transliterateLangData = [TransliterationAll]()
+    var transliterateLangDataEach = TransliterationAll()
+    var scriptLangDetailsSingle = ScriptLangDetails()
+    var toScriptDetails = ToScripts()
     
     
     //*****Structs for parsing JSON from Languages
@@ -125,21 +130,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         }
     }
     
-    
-    //Setup struct vars
-    var transliterateLangData = [TransliterationAll]()
-    var transliterateLangDataEach = TransliterationAll()
-    var scriptLangDetailsSingle = ScriptLangDetails()
-    var toScriptDetails = ToScripts()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        textToTransliterate.delegate = self
-        self.hideKeyboardWhenTappedAround()
-        
-        languageName.delegate = self
-        languageName.dataSource = self
+    func getLanguages() {
         
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
         let url = URL(string: sampleDataAddress)!
@@ -203,12 +194,24 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         //*****end get key
         transliterateLangDataEach.langName = "--Select--"
         transliterateLangData.insert(transliterateLangDataEach, at: 0)
+
+    }
+
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        textToTransliterate.delegate = self
+        self.hideKeyboardWhenTappedAround()
+        
+        languageName.delegate = self
+        languageName.dataSource = self
+        
+        getLanguages()
+        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
     
     @IBAction func transliterateBtnWasPressed(_ sender: Any) {
         

@@ -68,10 +68,10 @@
 				DE71555E203613AA0028203F /* AppDelegate.swift */,
 				DE715560203613AA0028203F /* MainMenu.swift */,
 				DE71557020363A5D0028203F /* Translation.swift */,
-				DE496B97205AE30500EB933D /* TransliterateParsing.swift */,
-				DE43B804206B001C0062CB5E /* Dictionary.swift */,
 				DE496B99205AE4CF00EB933D /* Transliteration.swift */,
+				DE43B804206B001C0062CB5E /* Dictionary.swift */,
 				DE43B806206C2C2E0062CB5E /* DictionaryJSONResponse.swift */,
+				DE496B97205AE30500EB933D /* TransliterateParsing.swift */,
 				DE715565203613AA0028203F /* Assets.xcassets */,
 				DE715567203613AA0028203F /* LaunchScreen.storyboard */,
 				DE71556A203613AA0028203F /* Info.plist */,
@@ -237,6 +237,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};
@@ -274,6 +275,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -284,6 +286,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
@@ -295,7 +298,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = JF5AMEJL94;
+				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -311,12 +316,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = JF5AMEJL94;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = TranslatorV3Sample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -10,11 +10,19 @@ import Foundation
 import UIKit
 
 class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+
+
+    @IBOutlet weak var fromLangPicker: UIPickerView!
+    @IBOutlet weak var toLangPicker: UIPickerView!
+    @IBOutlet weak var textToTranslate: UITextView!
+    @IBOutlet weak var translatedText: UITextView!
+    
     
     var fromLangCode = Int()
     var toLangCode = Int()
     var arrayLangInfo = [AllLangDetails]() //array of structs for language info
     let jsonEncoder = JSONEncoder()
+    
     
     //*****used after parsing to create an array of structs with language information
     struct AllLangDetails: Codable {
@@ -31,11 +39,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         var to: String
     }
     
-    @IBOutlet weak var fromLangPicker: UIPickerView!
-    @IBOutlet weak var toLangPicker: UIPickerView!
-    @IBOutlet weak var textToTranslate: UITextView!
-    @IBOutlet weak var translatedText: UITextView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,13 +52,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         toLangPicker.delegate = self
         
         getLanguages()
-        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     //*****IBAction
     
@@ -143,49 +142,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     }
     
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        var rowCount = Int()
-        
-        if pickerView == fromLangPicker {
-            rowCount = arrayLangInfo.count
-        } else if pickerView == toLangPicker {
-            rowCount = arrayLangInfo.count
-        }
-        return rowCount
-    }
-    
-    
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        var rowContent = String()
-        
-        //*****
-        //TO DO: THE NATIVE NAME PICKER IS NOT SORTED CORRECTLY NEED TO CREATE TWO ARRAYS AND SORT ONE BY NAME AND THE OTHER BY NATIVE NAME, FROM IS NATIVE NAME.
-        //*****
-        
-        if pickerView == fromLangPicker {
-            rowContent = arrayLangInfo[row].nativeName
-            
-        } else if pickerView == toLangPicker {
-            rowContent = arrayLangInfo[row].name
-        }
-        
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
-        
-        return attributedString
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let languageName = row
-        print("selected row ", languageName)
-    }
-    
-    
     //*****CODE FROM PLAYGROUND FOR GETTING LANGUAGES NEED TO MOVE SOME VARS TO CLASS VARS
     func getLanguages() {
         
@@ -230,10 +186,53 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             }
         }
         
-        
         arrayLangInfo.sort(by: {$0.name < $1.name}) //sort the structs based on the language name
-        
     }
+    
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        var rowCount = Int()
+        
+        if pickerView == fromLangPicker {
+            rowCount = arrayLangInfo.count
+        } else if pickerView == toLangPicker {
+            rowCount = arrayLangInfo.count
+        }
+        return rowCount
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        var rowContent = String()
+        
+        //*****
+        //TO DO: THE NATIVE NAME PICKER IS NOT SORTED CORRECTLY NEED TO CREATE TWO ARRAYS AND SORT ONE BY NAME AND THE OTHER BY NATIVE NAME, FROM IS NATIVE NAME.
+        //*****
+        
+        if pickerView == fromLangPicker {
+            rowContent = arrayLangInfo[row].nativeName
+            
+        } else if pickerView == toLangPicker {
+            rowContent = arrayLangInfo[row].name
+        }
+        
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
+        
+        return attributedString
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let languageName = row
+        print("selected row ", languageName)
+    }
+    
 }
 
 
@@ -243,7 +242,6 @@ extension Translation: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textToTranslate.text = ""
     }
-    
 }
 
 
