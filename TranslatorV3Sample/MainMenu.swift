@@ -10,7 +10,9 @@ import UIKit
 import Foundation
 
 class MainMenu: UIViewController {
-
+    
+//*****Segue to viewcontrollers are managed by the navigation controller.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -19,7 +21,6 @@ class MainMenu: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-//    *****Segue to viewcontrollers are managed by the navigation controller.
 }
 
 extension UIViewController {

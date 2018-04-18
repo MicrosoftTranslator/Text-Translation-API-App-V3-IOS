@@ -11,18 +11,15 @@ import UIKit
 
 class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-
     @IBOutlet weak var fromLangPicker: UIPickerView!
     @IBOutlet weak var toLangPicker: UIPickerView!
     @IBOutlet weak var textToTranslate: UITextView!
     @IBOutlet weak var translatedText: UITextView!
     
-    
     var fromLangCode = Int()
     var toLangCode = Int()
     var arrayLangInfo = [AllLangDetails]() //array of structs for language info
     let jsonEncoder = JSONEncoder()
-    
     
     //*****used after parsing to create an array of structs with language information
     struct AllLangDetails: Codable {
@@ -31,7 +28,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         var nativeName = String()
         var dir = String()
     }
-    
     
     //*****Format JSON for body of translation request
     struct TranslatedStrings: Codable {

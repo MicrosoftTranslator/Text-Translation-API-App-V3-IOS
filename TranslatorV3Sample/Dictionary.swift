@@ -57,20 +57,6 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     //*****End Struct for parsed data
     
-
-    @IBAction func lookupBtnPressed(_ sender: Any) {
-        
-        sendRequest(typeOfRequest: "lookup")
-        textToSubmitTxt.resignFirstResponder()
-        exampleBtn.isHidden = false
-        
-    }
-    
-    @IBAction func exampleBtnPressed(_ sender: Any) {
-        
-        sendRequest(typeOfRequest: "examples")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -84,6 +70,25 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         exampleBtn.isHidden = true
         lookupBtn.isHidden = true //hide the button until a selection is made
         
+        getLanguages()
+    }
+
+    @IBAction func lookupBtnPressed(_ sender: Any) {
+        
+        sendRequest(typeOfRequest: "lookup")
+        textToSubmitTxt.resignFirstResponder()
+        exampleBtn.isHidden = false
+        
+    }
+    
+    
+    @IBAction func exampleBtnPressed(_ sender: Any) {
+        
+        sendRequest(typeOfRequest: "examples")
+    }
+    
+    
+    func getLanguages() {
         
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary" //transliteration
         let url = URL(string: sampleDataAddress)!
@@ -131,13 +136,16 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         dictionaryLangArray.sort(by: {$0.langName < $1.langName})
         dictionaryLangEach.langNativeName = "--Select--"
         dictionaryLangArray.insert(dictionaryLangEach, at: 0)
-
+        
         secondLanguageArray = (dictionaryLangArray.first?.langTranslations)!
+        
     }
+    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
@@ -152,6 +160,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
     
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         lookupBtn.isHidden = false //unhide after row selected
@@ -163,6 +172,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             print(firstPickerRowSelected)
         }
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
@@ -176,6 +186,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
    
+    
     func sendRequest(typeOfRequest: String) {
         
         let fromLangCode = self.fromLanguage.selectedRow(inComponent: 0)
@@ -241,7 +252,6 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
         request.httpBody = jsonToTranslate
         
-        
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
         
@@ -262,6 +272,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
         task.resume() //run the setup task
     }
+    
     
     func parseJson(jsonData: Data, typeOfRequest: String) {
         
@@ -322,7 +333,6 @@ extension Dictionary: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textToSubmitTxt.text = ""
     }
-    
 }
 
 
