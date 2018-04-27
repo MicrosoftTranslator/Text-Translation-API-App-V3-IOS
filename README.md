@@ -1,11 +1,11 @@
 # Text-Translation-API-App-V3-IOS
 
 This app demonstrates the five main features of the Microsoft Text Translation API V3. The five methods are:
-...Languages
-...Translate
-...Transliteration
-...Dictionary/lookup
-...Dictionary/Examples
+* Languages
+* Translate
+* Transliteration
+* Dictionary/lookup
+* Dictionary/Examples
 
 The app is written in Swift. Clone the app, get an Azure Text Translation Subsrcription, get your key, replace the text ENTER-KEY-HERE with your key and you are ready to run.
 
