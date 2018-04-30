@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TranslatorV3Sample/Transliteration.swift"
+            timestampString = "545778044.039952"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TranslatorV3Sample/Dictionary.swift"
+            timestampString = "545778044.040596"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TranslatorV3Sample.Dictionary.parseJson(jsonData: Foundation.Data, typeOfRequest: Swift.String) -&gt; ()"
+                  moduleName = "TranslatorV3Sample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mstranslatormac/Desktop/MST%20V3%20API/TranslatorV3Sample/TranslatorV3Sample/Dictionary.swift"
+                  timestampString = "544658766.4521379"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "268"
+                  endingLineNumber = "268"
+                  offsetFromSymbolStart = "492">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in TranslatorV3Sample.Dictionary.parseJson(jsonData: Foundation.Data, typeOfRequest: Swift.String) -&gt; ()"
+                  moduleName = "TranslatorV3Sample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mstranslatormac/Desktop/MST%20V3%20API/TranslatorV3Sample/TranslatorV3Sample/Dictionary.swift"
+                  timestampString = "544658766.456025"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "269"
+                  endingLineNumber = "269"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

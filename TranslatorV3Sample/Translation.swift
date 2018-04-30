@@ -204,9 +204,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        
         var rowContent = String()
-        
-        
         
         if pickerView == fromLangPicker {
             rowContent = arrayLangInfo[row].nativeName
