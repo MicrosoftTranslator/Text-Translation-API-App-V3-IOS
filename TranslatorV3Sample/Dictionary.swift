@@ -90,7 +90,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     func getLanguages() {
         
-        let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary" //transliteration
+        let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary"
         let url = URL(string: sampleDataAddress)!
         let jsonData = try! Data(contentsOf: url)
         let jsonDecoder = JSONDecoder()
@@ -106,7 +106,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             let countTranslationsArray = language.translations.count
             
             for index1 in 0...countTranslationsArray - 1 {
-                //print("*****", language.scripts[index])
+                
                 dictionaryTranslationTo.name = language.translations[index1].name
                 dictionaryTranslationTo.nativeName = language.translations[index1].nativeName
                 dictionaryTranslationTo.dir = language.translations[index1].dir
@@ -206,7 +206,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
         
         let azureKey = "*****ENTER-KEY-HERE*****"
-        //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
+        
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
         let host = "dev.microsofttranslator.com"

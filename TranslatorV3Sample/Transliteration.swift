@@ -166,7 +166,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         }
         
         let azureKey = "*****ENTER-KEY-HERE*****"
-        //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
+        
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
         let host = "dev.microsofttranslator.com"
@@ -191,7 +191,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         request.addValue(host, forHTTPHeaderField: "Host")
         request.httpBody = jsonToTransliterate
         
-        //print(String(data: jsonToTranslate!, encoding: .utf8)!)
+        
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
         
@@ -266,7 +266,6 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
             
             if counter < countOfLanguages! {
                 transliterateLangData[counter].langCode = languageKey
-                //print(transliterateLangData[counter].langCode)
                 counter += 1
             }
         }

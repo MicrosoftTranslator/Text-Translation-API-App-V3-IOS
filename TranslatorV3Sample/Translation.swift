@@ -68,7 +68,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         }
         
         let azureKey = "*****ENTER-KEY-HERE*****"
-        //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
+        
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
         let host = "dev.microsofttranslator.com"
@@ -138,7 +138,6 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     }
     
     
-    //*****CODE FROM PLAYGROUND FOR GETTING LANGUAGES NEED TO MOVE SOME VARS TO CLASS VARS
     func getLanguages() {
         
         let sampleLangAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=translation"
@@ -207,9 +206,7 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         var rowContent = String()
         
-        //*****
-        //TO DO: THE NATIVE NAME PICKER IS NOT SORTED CORRECTLY NEED TO CREATE TWO ARRAYS AND SORT ONE BY NAME AND THE OTHER BY NATIVE NAME, FROM IS NATIVE NAME.
-        //*****
+        
         
         if pickerView == fromLangPicker {
             rowContent = arrayLangInfo[row].nativeName
