@@ -25,11 +25,9 @@ struct ResponseExamples: Codable {
     var targetSuffix = "--"
 }
 
-
 //*****
 //**********
 //*****
-
 
 //Response Struct for dictionary/lookup
 struct ResponseJsonLookup: Codable {

@@ -205,7 +205,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             
         }
         
-        let azureKey = "31b6016565ac4e1585b1fdb688e42c6d"
+        let azureKey = "*****ENTER-KEY-HERE*****"
         //let azureKey = "18358F19A2E74F80-A7C5BE039C8E614D"
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
