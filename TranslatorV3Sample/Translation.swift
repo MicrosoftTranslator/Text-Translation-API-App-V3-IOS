@@ -109,6 +109,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
                 
             }
             print("*****")
+             let str = String(decoding: responseData!, as: UTF8.self)
+            print (str)
             self.parseJson(jsonData: responseData!)
         }
         task.resume()
@@ -126,16 +128,39 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             var to: String
         }
         
-        let jsonDecoder = JSONDecoder()
-        let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
-        let numberOfTranslations = langTranslations!.count - 1
-        print(langTranslations!.count)
+         
+        // {"error":{"code":401000,"message":"The request is not authorized because credentials are missing or invalid."}}
+          
+        struct jsonError: Decodable {
+            let error: Platform
+            struct Platform: Decodable {
+                 let code: Int
+                let message: String
+            }
+        }
         
-        //Put response on main thread to update UI
-        DispatchQueue.main.async {
-            self.translatedText.text = langTranslations![0].translations[numberOfTranslations].text
+        let jsonDecoder = JSONDecoder()
+        print ("Raw Json ", jsonData.count);
+        let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
+        print(langTranslations?.count as Any)
+        if ((langTranslations) != nil) {
+            
+            let numberOfTranslations = langTranslations!.count - 1
+           
+            
+            //Put response on main thread to update UI
+            DispatchQueue.main.async {
+                self.translatedText.text = langTranslations![0].translations[numberOfTranslations].text
+            }
+        } else {
+            DispatchQueue.main.async {
+                let    aError : jsonError = try! jsonDecoder.decode(jsonError.self, from: jsonData)
+                print (aError)
+                self.translatedText.text = "No translation, error:" + aError.error.message;
+            }
         }
     }
+    
     
     
     func getLanguages() {
