@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D43D03024663A7200B9272E /* LanguageJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43D02F24663A7200B9272E /* LanguageJSON.swift */; };
+		1D43D03224665AF500B9272E /* KeysAndURLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D43D03124665AF400B9272E /* KeysAndURLS.swift */; };
 		DE43B805206B001C0062CB5E /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE43B804206B001C0062CB5E /* Dictionary.swift */; };
 		DE43B807206C2C2E0062CB5E /* DictionaryJSONResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE43B806206C2C2E0062CB5E /* DictionaryJSONResponse.swift */; };
 		DE496B9A205AE4CF00EB933D /* Transliteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE496B99205AE4CF00EB933D /* Transliteration.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D43D02F24663A7200B9272E /* LanguageJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageJSON.swift; sourceTree = "<group>"; };
+		1D43D03124665AF400B9272E /* KeysAndURLS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysAndURLS.swift; sourceTree = "<group>"; };
 		DE43B804206B001C0062CB5E /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		DE43B806206C2C2E0062CB5E /* DictionaryJSONResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryJSONResponse.swift; sourceTree = "<group>"; };
 		DE496B99205AE4CF00EB933D /* Transliteration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transliteration.swift; sourceTree = "<group>"; };
@@ -68,6 +72,8 @@
 				DE71557020363A5D0028203F /* Translation.swift */,
 				DE496B99205AE4CF00EB933D /* Transliteration.swift */,
 				DE43B804206B001C0062CB5E /* Dictionary.swift */,
+				1D43D03124665AF400B9272E /* KeysAndURLS.swift */,
+				1D43D02F24663A7200B9272E /* LanguageJSON.swift */,
 				DE43B806206C2C2E0062CB5E /* DictionaryJSONResponse.swift */,
 				DE715565203613AA0028203F /* Assets.xcassets */,
 				DE715567203613AA0028203F /* LaunchScreen.storyboard */,
@@ -103,11 +109,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = MSTranslatorMac;
 				TargetAttributes = {
 					DE71555A203613AA0028203F = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -148,6 +155,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D43D03024663A7200B9272E /* LanguageJSON.swift in Sources */,
+				1D43D03224665AF500B9272E /* KeysAndURLS.swift in Sources */,
 				DE496B9A205AE4CF00EB933D /* Transliteration.swift in Sources */,
 				DE715561203613AA0028203F /* MainMenu.swift in Sources */,
 				DE71555F203613AA0028203F /* AppDelegate.swift in Sources */,
@@ -193,6 +202,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -200,6 +210,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -233,6 +244,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
@@ -251,6 +263,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -258,6 +271,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -285,6 +299,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -302,7 +317,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -321,7 +336,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MST.TranslatorV3Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

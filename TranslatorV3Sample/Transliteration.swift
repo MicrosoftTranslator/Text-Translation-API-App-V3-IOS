@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class TransliterationUIDel: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var languageName: UIPickerView!
     @IBOutlet weak var fromScriptBtn1: UIButton!
@@ -33,44 +33,8 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     var scriptLangDetailsSingle = ScriptLangDetails()
     var toScriptDetails = ToScripts()
     
-    //*****Structs for parsing JSON from Languages
-    struct Transliteration: Codable {
-        var transliteration = [String: LanguageNames]()
-    }
-    
-    //This is for parsing of request JSON as a dictionary
-    struct LanguageNames: Codable {
-        var name = String()
-        var nativeName = String()
-        var scripts = [ScriptLangDetails]()
-    }
-    
-    //*****Used to hold the final data from parsing in an array of structs data pulled from dictionary parsed from the languages JSON.
-    struct TransliterationAll: Codable {
-        var langCode = String()
-        var langName = String()
-        var langNativeName = String()
-        var langScriptData = [ScriptLangDetails]() //re-using struct from parsing
-    }
+ 
 
-    //This is for parsing JSON from Languages, and after JSON parsing to hold final data
-    struct ScriptLangDetails: Codable {
-        var code = String()
-        var name = String()
-        var nativeName = String()
-        var dir = String()
-        var toScripts = [ToScripts]()
-    }
-    
-    //This is for parsing and after JSON parsing to hold final data
-    struct ToScripts: Codable {
-        var code = String()
-        var name = String()
-        var nativeName = String()
-        var dir = String()
-    }
-    //*****end structs
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,6 +117,8 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
     
     
+    /* curl -X POST "https://api.cognitive.microsofttranslator.com/transliterate?api-version=3.0&language=ja&fromScript=Jpan&toScript=Latn" -H "X-ClientTraceId: 875030C7-5380-40B8-8A03-63DACCF69C11" -H "Ocp-Apim-Subscription-Key: <client-secret>" -H "Content-Type: application/json" -d @request.txt
+    */
     @IBAction func transliterateBtnWasPressed(_ sender: Any) {
         
         var pickerSelection = Int()
@@ -160,19 +126,12 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         languageCode = transliterateLangData[pickerSelection].langCode
         
         textToTransliterate.resignFirstResponder()
-        
-        struct encodeText: Codable {
-            var text = String()
-        }
-        
-        let azureKey = "*****ENTER-KEY-HERE*****"
-        
-        let contentType = "application/json"
-        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
-        let host = "dev.microsofttranslator.com"
-        let apiURL = "https://dev.microsofttranslator.com/transliterate?api-version=3.0&fromscript=" + fromLangScript + "&language=" + languageCode + "&toscript=" + toLangScript
-        
         let text2Transliterate = textToTransliterate.text
+
+        // https://api.cognitive.microsofttranslator.com/transliterate?api-version=3.0
+        
+        let apiURL = "https://api.cognitive.microsofttranslator.com/transliterate?api-version=3.0&fromscript=" + fromLangScript + "&language=" + languageCode + "&toscript=" + toLangScript
+        
         var encodeTextSingle = encodeText()
         var toTransliterate = [encodeText]()
         
@@ -181,16 +140,24 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         print("struct to transliterate ", toTransliterate)
         
         let jsonToTransliterate = try? jsonEncoder.encode(toTransliterate)
+        
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
-        
+        print ("URL:", apiURL)
+         
         request.httpMethod = "POST"
+    	request.httpBody = jsonToTransliterate
+        
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(azureRegion, forHTTPHeaderField: "Ocp-Apim-Subscription-Region")
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
         request.addValue(host, forHTTPHeaderField: "Host")
-        request.httpBody = jsonToTransliterate
         
+        print ("Headers:", request.allHTTPHeaderFields!)
+              
+        let str = String(decoding: request.httpBody!, as: UTF8.self)
+        print (str)
         
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
@@ -207,7 +174,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
                 self.present(alert, animated: true)
             }
             
-            self.parseJson(jsonData: responseData!)
+            self.parseTransliterationJson(jsonData: responseData!)
         }
         task.resume()
     }
@@ -215,6 +182,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     
     func getLanguages() {
         
+        // https://api.cognitive.microsofttranslator.com -- TODO FIX URL to API Specs
         let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=transliteration" //transliteration
         let url = URL(string: sampleDataAddress)!
         let jsonData = try! Data(contentsOf: url)
@@ -276,7 +244,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
     }
 
     
-    func parseJson(jsonData: Data) {
+    func parseTransliterationJson(jsonData: Data) {
         
         //*****Transliteration returned data*****
 
@@ -324,7 +292,8 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
         rowContent = transliterateLangData[row].langName
         
         
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor: UIColor.black])
+        let attributedString = NSAttributedString(string: rowContent, 
+        	attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         
         return attributedString
     }
@@ -373,7 +342,7 @@ class Transliteration: UIViewController, UIPickerViewDelegate, UIPickerViewDataS
 }
 
 
-extension Transliteration: UITextViewDelegate {
+extension TransliterationUIDel: UITextViewDelegate {
     
     //this clears the text view
     func textViewDidBeginEditing(_ textView: UITextView) {
