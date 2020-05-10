@@ -4,7 +4,7 @@
 
 import Foundation
 
- let azureKey = "75605c0edf924ef197302112e1bbdc2a"
+ let azureKey = "ENTER-KEY-HERE"
   let azureRegion = "eastus";
   let contentType = "application/json"
 
