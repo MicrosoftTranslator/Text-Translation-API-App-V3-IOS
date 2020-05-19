@@ -16,30 +16,14 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     @IBOutlet weak var textToTranslate: UITextView!
     @IBOutlet weak var translatedText: UITextView!
     
-    var fromLangCode = Int()
-    var toLangCode = Int()
     var arrayLangInfo = [AllLangDetails]() //array of structs for language info
-    let jsonEncoder = JSONEncoder()
     
-    //*****used after parsing to create an array of structs with language information
-    struct AllLangDetails: Codable {
-        var code = String()
-        var name = String()
-        var nativeName = String()
-        var dir = String()
-    }
-    
-    //*****Format JSON for body of translation request
-    struct TranslatedStrings: Codable {
-        var text: String
-        var to: String
-    }
-    
+  
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textToTranslate.delegate = self
+        textToTranslate.delegate = self // UITextView!
         self.hideKeyboardWhenTappedAround()
         
         fromLangPicker.dataSource = self
@@ -47,52 +31,71 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         fromLangPicker.delegate =  self
         toLangPicker.delegate = self
         
-        getLanguages()
+        getTranslationLanguages()
     }
     
-    
     //*****IBAction
-    
+    /*    curl -X POST "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=es" \
+           >      -H "Ocp-Apim-Subscription-Key: 75605c0edf924ef197302112e1bbdc2a" \
+           >      -H "Ocp-Apim-Subscription-Region:eastus" \
+           >      -H "Content-Type: application/json" \
+           >      -d "[{'Text':'Hello, what is your name?'}]"
+     
+           [{"detectedLanguage":{"language":"en","score":1.0},"translations":[{"text":"Hola, ¿cómo te llamas?","to":"es"}]}]
+    */
     @IBAction func getTranslationBtn(_ sender: Any) {
+        var fromLangCode = Int()
+        var toLangCode = Int()
+        let jsonEncoder = JSONEncoder()
         
+        // -------------------------------------------------
+        // NOTE:  UI Handling get current values in iOS.
+            
         fromLangCode = self.fromLangPicker.selectedRow(inComponent: 0)
         toLangCode = self.toLangPicker.selectedRow(inComponent: 0)
+        let text2Translate = textToTranslate.text   // UITextView!
         
-        print("this is the selected language code ->", arrayLangInfo[fromLangCode].code)
+        // end values...
         
+        
+        print("getTranslationBtn\nthis is the selected language code ->", arrayLangInfo[fromLangCode].code)
+        print("Text:", text2Translate!)
+                    
         let selectedFromLangCode = arrayLangInfo[fromLangCode].code
         let selectedToLangCode = arrayLangInfo[toLangCode].code
         
-        struct encodeText: Codable {
-            var text = String()
-        }
-        
-        let azureKey = "*****ENTER-KEY-HERE*****"
-        
-        let contentType = "application/json"
-        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
-        let host = "dev.microsofttranslator.com"
-        let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
-        
-        let text2Translate = textToTranslate.text
         var encodeTextSingle = encodeText()
         var toTranslate = [encodeText]()
-        
         encodeTextSingle.text = text2Translate!
+              
         toTranslate.append(encodeTextSingle)
+        toTranslate.append(encodeTextSingle)
+                    
+        let jsonToTranslate = try? jsonEncoder.encode(toTranslate)  //  Body: [{"text":"Enter Text"}]
+        print ("Body json",  jsonToTranslate!)
         
-        let jsonToTranslate = try? jsonEncoder.encode(toTranslate)
+        let apiURL = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
+        print ("URL:", apiURL)
+        
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
 
         request.httpMethod = "POST"
+        request.httpBody = jsonToTranslate
+        let bodyLen = request.httpBody!.count
+        
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(azureRegion, forHTTPHeaderField: "Ocp-Apim-Subscription-Region")
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
         request.addValue(host, forHTTPHeaderField: "Host")
-        request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
-        request.httpBody = jsonToTranslate
         
+        request.addValue(String(bodyLen ), forHTTPHeaderField: "Content-Length")
+        print ("Headers:", request.allHTTPHeaderFields!)
+              
+        let str = String(decoding: request.httpBody!, as: UTF8.self)
+        print (str)
+
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
         
@@ -104,63 +107,63 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
                 let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
                 
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                
                 self.present(alert, animated: true)
-                
             }
-            print("*****")
-            self.parseJson(jsonData: responseData!)
+            
+            print("***** getTranslation>")
+            let str = String(decoding: responseData!, as: UTF8.self)
+            print ("Repsonse: ",str)
+            // {"error":{"code":401000,"message":"The request is not authorized because credentials are missing or invalid."}}
+
+            self.parseJsonTranslate(jsonData: responseData!)
+           
         }
         task.resume()
     }
     
+  //  URL: https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=en&to=ja
+  //  Body: [{"text":"Enter Text"}]
+  //  Response:  [{"translations":[{"text":"テキストを入力する","to":"ja"}]}]
     
-    func parseJson(jsonData: Data) {
-        
-        //*****TRANSLATION RETURNED DATA*****
-        struct ReturnedJson: Codable {
-            var translations: [TranslatedStrings]
-        }
-        struct TranslatedStrings: Codable {
-            var text: String
-            var to: String
-        }
+    func parseJsonTranslate(jsonData: Data) {
         
         let jsonDecoder = JSONDecoder()
-        let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
-        let numberOfTranslations = langTranslations!.count - 1
-        print(langTranslations!.count)
-        
-        //Put response on main thread to update UI
-        DispatchQueue.main.async {
-            self.translatedText.text = langTranslations![0].translations[numberOfTranslations].text
+        if (jsonData.count == 0) {
+            DispatchQueue.main.async {
+                self.translatedText.text = "No data returned";
+            }
+             return;
         }
+            
+        let langTranslations = try? jsonDecoder.decode(Array<TranslationReturnedJson>.self, from: jsonData)
+        print(langTranslations?.count as Any)
+         //Put response on main thread to update UI
+        DispatchQueue.main.async {
+            if ((langTranslations) != nil) {
+                
+                let numberOfTranslations = langTranslations!.count - 1
+                self.translatedText.text = langTranslations![numberOfTranslations].translations[0].text // only show 1st translation
+                
+            } else {
+                    let    aError : jsonError = try! jsonDecoder.decode(jsonError.self, from: jsonData)
+                    print (aError)
+                    self.translatedText.text = "No translation, error:" + aError.error.message;
+            }
+        }
+        
     }
     
     
-    func getLanguages() {
+    func getTranslationLanguages() {
         
-        let sampleLangAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=translation"
-        
-        let url1 = URL(string: sampleLangAddress)
+        let  translationLangListAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=translation"
+        let url1 = URL(string: translationLangListAddress)
         let jsonLangData = try! Data(contentsOf: url1!)
         
-        //*****used in the parsing of request Json
-        struct Translation: Codable {
-            var translation: [String: LanguageDetails]
-            
-        }
-        struct LanguageDetails: Codable {
-            var name: String
-            var nativeName: String
-            var dir: String
-        }
-        //*****
-        
         let jsonDecoder1 = JSONDecoder()
-        var languages: Translation?
+        var languages: TranslationLang?
         
-        languages = try! jsonDecoder1.decode(Translation.self, from: jsonLangData)
+        languages = try! jsonDecoder1.decode(TranslationLang.self, from: jsonLangData)
         var eachLangInfo = AllLangDetails(code: " ", name: " ", nativeName: " ", dir: " ") //Use this instance to populate and then append to the array instance
         
         for languageValues in languages!.translation.values {
@@ -168,11 +171,12 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
             eachLangInfo.nativeName = languageValues.nativeName
             eachLangInfo.dir = languageValues.dir
             arrayLangInfo.append(eachLangInfo)
+        //    print(languageValues.name);
         }
         
         let countOfLanguages = languages?.translation.count
         var counter = 0
-        
+       
         for languageKey in languages!.translation.keys {
             
             if counter < countOfLanguages! {
@@ -184,6 +188,8 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         arrayLangInfo.sort(by: {$0.name < $1.name}) //sort the structs based on the language name
     }
     
+// -------------------------------------------------
+// NOTE:  UI Handling for selecting Language in iOS.
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -208,13 +214,13 @@ class Translation: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         var rowContent = String()
         
         if pickerView == fromLangPicker {
-            rowContent = arrayLangInfo[row].nativeName
+            rowContent = arrayLangInfo[row].nativeName + "(" + arrayLangInfo[row].name + ")"
             
         } else if pickerView == toLangPicker {
-            rowContent = arrayLangInfo[row].name
+            rowContent = arrayLangInfo[row].name + "(" + arrayLangInfo[row].nativeName + ")"
         }
         
-        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
+        let attributedString = NSAttributedString(string: rowContent, attributes: [NSAttributedString.Key.foregroundColor : UIColor.black])
         
         return attributedString
     }

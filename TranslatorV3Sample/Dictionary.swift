@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class DictionaryUI: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var fromLanguage: UIPickerView!
     @IBOutlet weak var toLanguage: UIPickerView!
@@ -20,42 +20,15 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     var dictionaryLangArray = [DictionaryLanguages]()
     var dictionaryLangEach = DictionaryLanguages()
-    var dictionaryTranslationTo = TranslationsTo()
+    var dictionaryTranslationTo = DictTranslationsTo()
+    
     var firstPickerRowSelected = Int()
-    var secondLanguageArray = [TranslationsTo]()
+    var secondLanguageArray = [DictTranslationsTo]()
     let jsonEncoder = JSONEncoder()
     var exampleText = String()
     var exampleTranslation = String()
     
-    //*****Structs for parsing JSON from Languages
-    struct Dictionary: Codable {
-        var dictionary = [String: LanguageNames]()
-    }
-    
-    struct LanguageNames: Codable {
-        var name = String()
-        var nativeName = String()
-        var dir = String()
-        var translations = [TranslationsTo]()
-    }
-    
-    struct TranslationsTo: Codable {
-        var name = String()
-        var nativeName = String()
-        var dir = String()
-        var code = String()
-    }
-    //*****End struct for languages parsing
-    
-    //*****Struct for data after json parsing
-    struct DictionaryLanguages: Codable {
-        var langCode = String()
-        var langName = String()
-        var langNativeName = String()
-        var langDir = String()
-        var langTranslations = [TranslationsTo]()
-    }
-    //*****End Struct for parsed data
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +43,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         exampleBtn.isHidden = true
         lookupBtn.isHidden = true //hide the button until a selection is made
         
-        getLanguages()
+        getDictionaryLanguages()
     }
 
     @IBAction func lookupBtnPressed(_ sender: Any) {
@@ -87,21 +60,24 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         sendRequest(typeOfRequest: "examples")
     }
     
+    // curl "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0&scope=dictionary"
     
-    func getLanguages() {
+    func getDictionaryLanguages() {
         
-        let sampleDataAddress = "https://dev.microsofttranslator.com/languages?api-version=3.0&scope=dictionary"
-        let url = URL(string: sampleDataAddress)!
+        let getLanguagesListURLAddress = "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0&scope=dictionary"
+        print ("getLanguages", getLanguagesListURLAddress)
+        let url = URL(string: getLanguagesListURLAddress)!
+        
         let jsonData = try! Data(contentsOf: url)
         let jsonDecoder = JSONDecoder()
-        let languages = try? jsonDecoder.decode(Dictionary.self, from: jsonData)
+        let languages = try? jsonDecoder.decode(LangDictionary.self, from: jsonData)
         
         for language in (languages?.dictionary.values)! {
             
             dictionaryLangEach.langName = language.name
             dictionaryLangEach.langNativeName = language.nativeName
             dictionaryLangEach.langDir = language.dir
-            print("number of scriptLangDetails structs", language.translations.count)
+           // print("number of scriptLangDetails structs", language.translations.count)
             
             let countTranslationsArray = language.translations.count
             
@@ -127,7 +103,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             
             if counter < countOfLanguages! {
                 dictionaryLangArray[counter].langCode = languageKey
-                print(languageKey)
+             //   print(languageKey)
                 counter += 1
             }
         }
@@ -204,13 +180,10 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             var translation = String()
             
         }
-        
-        let azureKey = "*****ENTER-KEY-HERE*****"
-        
-        let contentType = "application/json"
-        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
-        let host = "dev.microsofttranslator.com"
-        let apiURL = "https://dev.microsofttranslator.com/dictionary/" + typeOfRequest + "?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
+     
+       // https://api.cognitive.microsofttranslator.com/dictionary/lookup?api-version=3.0
+   
+        let apiURL = "https://api.cognitive.microsofttranslator.com/dictionary/" + typeOfRequest + "?api-version=3.0&from=" + selectedFromLangCode + "&to=" + selectedToLangCode
         
         //get text from UItext field
         let lookupText2Translate = textToSubmitTxt.text
@@ -233,6 +206,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         //setup the URL
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
+        print (typeOfRequest, "URL:", apiURL)
         var jsonToTranslate = try? jsonEncoder.encode(encodeLookupText)
         
         if typeOfRequest == "lookup" {
@@ -245,12 +219,20 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
         
         request.httpMethod = "POST"
+        request.httpBody = jsonToTranslate
+         
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(azureRegion, forHTTPHeaderField: "Ocp-Apim-Subscription-Region")
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
+    //    request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
         request.addValue(host, forHTTPHeaderField: "Host")
         request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
-        request.httpBody = jsonToTranslate
+       
+        print ("Headers:", request.allHTTPHeaderFields!)
+              
+        let str = String(decoding: request.httpBody!, as: UTF8.self)
+        print ("Body:", str)        // Lookup: [{"text":"exit"}]
+
         
         let config = URLSessionConfiguration.default
         let session =  URLSession(configuration: config)
@@ -283,7 +265,9 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             
             DispatchQueue.main.async {
                 
-                if dictionaryTranslationsExample?.count != 0 && dictionaryTranslationsExample?[0].examples.count != 0 {
+                if ((dictionaryTranslationsExample != nil)) &&
+                	 dictionaryTranslationsExample?.count != 0 && 
+                	 dictionaryTranslationsExample?[0].examples.count != 0 {
                     
                     let sourcePrefix = dictionaryTranslationsExample![0].examples[0].sourcePrefix
                     let sourceTerm = dictionaryTranslationsExample![0].examples[0].sourceTerm
@@ -310,7 +294,9 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             
             DispatchQueue.main.async {
                 
-                if dictionaryTranslationsLookup?.count != 0 && dictionaryTranslationsLookup![0].translations.count != 0 {
+                if (dictionaryTranslationsLookup != nil) &&
+                    dictionaryTranslationsLookup?.count != 0 &&
+                    dictionaryTranslationsLookup![0].translations.count != 0 {
                     self.exampleText = dictionaryTranslationsLookup![0].normalizedSource
                     self.exampleTranslation = dictionaryTranslationsLookup![0].translations[0].normalizedTarget
                     
@@ -327,7 +313,7 @@ class Dictionary: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 } //end class
 
 
-extension Dictionary: UITextFieldDelegate {
+extension DictionaryUI: UITextFieldDelegate {
     
     //this clears the text view
     func textFieldDidBeginEditing(_ textField: UITextField) {
